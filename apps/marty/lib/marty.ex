@@ -4,7 +4,6 @@ defmodule Marty do
 
   def hello(force \\ true) do
     Connection.send_command(Commands.hello(force))
-
   end
 
   def celebrate(move_time) do
