@@ -1,4 +1,4 @@
-defmodule MartyControl.Mixfile do
+defmodule Marty.Umbrella.Mixfile do
   use Mix.Project
 
   def project do
@@ -10,9 +10,6 @@ defmodule MartyControl.Mixfile do
   end
 
   defp deps do
-    [
-      {:credo, ">= 0.0.0", only: [:dev, :test]},
-      {:dialyxir, "~> 0.5.1", only: [:dev, :test]},
-    ]
+    []
   end
 end
