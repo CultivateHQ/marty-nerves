@@ -2,7 +2,7 @@
 
 Controls Marty The Robot.
 
-Ultimately this will go ona  Pi Zero, running Nerves, possibly inside Marty's head.
+Ultimately this will go on a  Pi Zero, running Nerves, possibly inside Marty's head.
 
 Initial goals are:
 
