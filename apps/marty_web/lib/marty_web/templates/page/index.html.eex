@@ -3,4 +3,12 @@
 </div>
 <p>Maybe we should add a button that makes Marty do the "hello" thing</p>
 
-<button id="hello">Hello?</button>
+<p> <button id="hello">Hello?</button> </p>
+<p>
+  <select id="celebrate-time">
+    <option>quick</option>
+    <option>medium</option>
+    <option>slow</option>
+  </select>
+  <button id="celebrate">Celebrate</button>
+</p>
