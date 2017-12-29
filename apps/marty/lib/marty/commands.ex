@@ -4,12 +4,11 @@ defmodule Marty.Commands do
     <<0x02, 0x1::size(16)-little, 0x1e>>
   end
 
-  def hello(force \\ false)
   def hello(true) do
     <<0x02, 0x2::size(16)-little, 0x00, 0x01>>
   end
   def hello(false) do
-    <<0x02, 0x1::size(16)-little, 0x00>>
+    <<0x02, 0x2::size(16)-little, 0x00, 0x00>>
   end
 
   def celebrate(move_time) do
@@ -24,7 +23,7 @@ defmodule Marty.Commands do
   end
 
   def walk(steps, turn, move_time, step_length, side) do
-    <<0x02, 0x07::size(16)-little, 0x03::signed, steps, turn,
+    <<0x02, 0x07::size(16)-little, 0x03, steps, turn,
       move_time::size(16)-little, step_length::signed, side>>
   end
 
@@ -42,5 +41,12 @@ defmodule Marty.Commands do
 
   def circle_dance(side, move_time) do
     <<0x02, 0x04::size(16)-little, 0x1c, side, move_time::size(16)-little>>
+  end
+
+  def lifelike_behaviours(true), do: do_lifelike_behaviours(0x01)
+  def lifelike_behaviours(false), do: do_lifelike_behaviours(0x00)
+
+  def do_lifelike_behaviours(enabled) do
+    <<0x02, 0x02::size(16)-little, 0x1d, enabled>>
   end
 end
