@@ -7,7 +7,7 @@ defmodule MartyWeb.MartyChannel do
 
 
   def handle_in("hello", _, socket) do
-    Marty.hello
+    Marty.hello(false)
     {:reply, :ok, socket}
   end
 
