@@ -21,6 +21,15 @@ document.getElementById("celebrate").addEventListener("click", e => {
   channel.push("celebrate", {duration: celebrateSelect.value})
 })
 
+const directions = ["forward", "back", "left", "right"]
+
+for (let d of directions) {
+  let button = document.getElementById(`move-${d}`)
+  button.addEventListener("click", e => {
+    channel.push("walk", {direction: d})
+  })
+}
+
 
 
 

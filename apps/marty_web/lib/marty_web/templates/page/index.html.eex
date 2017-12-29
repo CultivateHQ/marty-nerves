@@ -1,14 +1,46 @@
-<div class="jumbotron">
-  <h2>Ok, let's control Marty</h2>
-</div>
-<p>Maybe we should add a button that makes Marty do the "hello" thing</p>
-
-<p> <button id="hello">Hello?</button> </p>
 <p>
-  <select id="celebrate-time">
-    <option>quick</option>
-    <option>medium</option>
-    <option>slow</option>
-  </select>
-  <button id="celebrate">Celebrate</button>
+  <div class="controller__right-controls">
+    <p> <button id="hello">Hello?</button> </p>
+    <select id="celebrate-time">
+      <option>quick</option>
+      <option>medium</option>
+      <option>slow</option>
+    </select>
+    <button id="celebrate">Celebrate</button>
+  </div>
+  <div class="controller__left-controls">
+    <table>
+      <tbody>
+        <tr>
+          <td colspan="3">
+            <h2 class="controller__title">
+              <i class="fa fa-arrows"></i> Movement</h2>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>
+            <button class="direction" id="move-forward">&utrif;</button>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>
+            <button class="direction" id="move-left">&ltrif;</button>
+          </td>
+          <td>&nbsp;</td>
+          <td>
+            <button class="direction" id="move-right">&rtrif;</button>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>
+            <button class="direction" id="move-back">&dtrif;</button>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </p>

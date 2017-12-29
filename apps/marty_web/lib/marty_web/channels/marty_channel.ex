@@ -25,6 +25,21 @@ defmodule MartyWeb.MartyChannel do
     {:reply, {:ok, payload}, socket}
   end
 
+  def handle_in("walk", %{"direction" => direction}, socket) do
+    turn = case direction do
+             "left" -> 100
+             "right" -> -100
+             _ -> 0
+           end
+    step_length = case direction do
+                    "back" -> -100
+                    _ -> 100
+                  end
+    IO.inspect {direction, turn, step_length}
+    Marty.walk(3, turn, 5_000, step_length, 4)
+    {:reply, :ok, socket}
+  end
+
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
     {:noreply, socket}
