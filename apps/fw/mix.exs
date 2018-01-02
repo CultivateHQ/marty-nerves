@@ -35,7 +35,7 @@ defmodule Fw.Mixfile do
   end
   def application(_target) do
     [mod: {Fw.Application, []},
-     extra_applications: [:logger]]
+     extra_applications: [:logger, :runtime_tools]]
   end
 
   def deps do
@@ -43,6 +43,7 @@ defmodule Fw.Mixfile do
       {:nerves, "~> 0.7", runtime: false},
       {:marty, in_umbrella: true},
       {:marty_web, in_umbrella: true},
+      {:wifi, in_umbrella: true},
     ] ++
     deps(@target)
   end

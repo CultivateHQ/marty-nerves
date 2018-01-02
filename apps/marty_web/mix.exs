@@ -13,7 +13,7 @@ defmodule MartyWeb.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
-      aliases: aliases(),
+      aliases: aliases(Mix.env),
       deps: deps()
     ]
   end
@@ -47,10 +47,10 @@ defmodule MartyWeb.Mixfile do
     ]
   end
 
-  # Aliases are shortcuts or tasks specific to the current project.
-  #
-  # See the documentation for `Mix` for more info on aliases.
-  defp aliases do
-    []
+  def aliases(:prod) do
+    [
+      "compile": ["compile", "brunch_build", "phx.digest"]
+    ]
   end
+  def aliases(_), do: []
 end
