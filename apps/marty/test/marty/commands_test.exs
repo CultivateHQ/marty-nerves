@@ -28,8 +28,5 @@ defmodule Marty.CommandsTest do
         assert reported_length == byte_size(command) - 3
       end
     end
-
-
   end
-
 end

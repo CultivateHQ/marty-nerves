@@ -13,6 +13,21 @@ defmodule Marty.CommandDefinitions do
     {:lifelike_behaviours, 0x1d, [{:force, :boolean}]},
   ]
 
+  defmacro __using__(which) when is_atom(which) do
+    apply(__MODULE__, which, [])
+  end
+
+  def define_commands do
+    define_command_methods = Enum.map(@definitions, & make_command(&1))
+
+    helpers = quote do
+      def convert_bool(true), do: 1
+      def convert_bool(false), do: 0
+    end
+
+    [helpers | define_command_methods]
+  end
+
   def call_commands do
     for {name, _, arg_definitions} <- @definitions do
       params = arg_definitions
@@ -53,7 +68,7 @@ defmodule Marty.CommandDefinitions do
     |> Enum.join(",")
   end
 
-  def make_command({name, opcode, args}) do
+  defp make_command({name, opcode, args}) do
     function_params = args
     |> Enum.map(fn {a, _} -> Macro.var(a, nil) end)
 
@@ -69,21 +84,5 @@ defmodule Marty.CommandDefinitions do
         unquote(quoted_command)
       end
     end
-  end
-
-
-  def define_commands do
-    define_command_methods = Enum.map(@definitions, & __MODULE__.make_command(&1))
-
-    helpers = quote do
-      def convert_bool(true), do: 1
-      def convert_bool(false), do: 0
-    end
-
-    [helpers | define_command_methods]
-  end
-
-  defmacro __using__(which) when is_atom(which) do
-    apply(__MODULE__, which, [])
   end
 end
