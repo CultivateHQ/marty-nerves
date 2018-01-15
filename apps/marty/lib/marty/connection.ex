@@ -1,6 +1,6 @@
 defmodule Marty.Connection do
   use GenServer
-  alias Marty.{Commands, Queries}
+  alias Marty.{Commands, Queries, State}
   require Logger
 
 
@@ -27,6 +27,7 @@ defmodule Marty.Connection do
 
 
   def init(_) do
+    State.disconnected()
     send(self(), :connect)
     {:ok, %{sock: nil}}
   end
@@ -37,6 +38,7 @@ defmodule Marty.Connection do
         Logger.debug "Connected to Marty"
         :gen_tcp.send(sock, Commands.enable_safeties())
         :gen_tcp.send(sock, Commands.lifelike_behaviours(true))
+        State.connected()
         {:noreply, %{s | sock: sock}}
       err ->
         Logger.debug fn -> "Failed to connect to Marty: #{inspect(err)}" end
@@ -77,6 +79,7 @@ defmodule Marty.Connection do
   end
 
   defp disconnect(sock) do
+    State.disconnected()
     :gen_tcp.close(sock)
   end
 end

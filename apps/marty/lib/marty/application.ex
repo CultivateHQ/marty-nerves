@@ -5,6 +5,8 @@ defmodule Marty.Application do
 
   def start(_type, _args) do
     children = [
+      {Registry, keys: :duplicate, name: Marty.State.Registry},
+      Marty.State,
       Marty.Connection,
     ]
 
