@@ -2,6 +2,7 @@ defmodule MartyWeb.MartyChannel do
   use MartyWeb, :channel
 
   def join("marty", _payload, socket) do
+    Marty.State.subscribe()
     {:ok, socket}
   end
 
@@ -21,10 +22,6 @@ defmodule MartyWeb.MartyChannel do
     {:reply, :ok, socket}
   end
 
-  def handle_in("ping", payload, socket) do
-    {:reply, {:ok, payload}, socket}
-  end
-
   def handle_in("walk", %{"direction" => direction}, socket) do
     turn = case direction do
              "left" -> 100
@@ -40,8 +37,8 @@ defmodule MartyWeb.MartyChannel do
     {:reply, :ok, socket}
   end
 
-  def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
+  def handle_info({:marty_state, marty_state}, socket) do
+    push socket, "marty_state", marty_state
     {:noreply, socket}
   end
 end

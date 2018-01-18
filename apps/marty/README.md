@@ -3,7 +3,9 @@
 The interface for sending to [Marty](https://robotical.io). Right now configured to send to 10.0.0.49, Marty's address on
 our home network.
 
-Send commdands through the `Marty` module. For example
+Send commands through the `Marty` module. For example
+
+The Socket API is [here](http://docs.robotical.io/hardware/esp-socket-api/).
 
 ```
 iex> Marty.hello(false)

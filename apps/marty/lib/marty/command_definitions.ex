@@ -2,15 +2,26 @@ defmodule Marty.CommandDefinitions do
 
   @definitions [
     {:hello, 0x0, [{:force, :boolean}]},
-    {:celebrate, 0x08, [{:move_time, :uint16}]},
-    {:buzz_prevention, 0x18, [{:enabled, :boolean}]},
+    {:lean, 0x02, [{:direction, :uint16}, {:amount, :int8}, {:move_time, :uint16}]},
     {:walk, 0x03, [{:steps, :uint8}, {:turn, :uint8}, {:move_time, :uint16}, {:step_length, :int8}, {:side, :uint8}]},
     {:kick, 0x05, [{:side, :int8}, {:twist, :int8}, {:move_time, :uint16}]},
+    {:celebrate, 0x08, [{:move_time, :uint16}]},
+    {:tap_foot, 0x0A, [{:side, :int8}]},
     {:arms, 0x0b, [{:r_angle, :int8}, {:l_angle, :int8}, {:move_time, :uint16}]},
+    {:side_step, 0x0E, [{:side, :int8}, {:num_steps, :int8}, {:move_time, :uint16}, {:step_length, :int8}]},
+    {:stand_straight, 0x0F, [{:move_time, :uint8}]},
     {:play_sound, 0x10, [{:freq_start, :uint16}, {:freq_end, :uint16}, {:duration, :uint16}]},
+    {:stop, 0x11, [{:stop_type, :uint8}]},
+    {:move_joint, 0x12, [{:joint_id, :uint8}, {:position, :int8}, {:move_time, :uint16}]},
+    # Enable and disable motors not implemented as a bit non-standard
+    {:fall_protection, 0x15, [{:enable, :boolean}]},
+    {:motor_protection, 0x16, [{:enable, :boolean}]},
+    {:low_battery_cutoff, 0x17, [{:enable, :boolean}]},
+    {:buzz_prevention, 0x18, [{:enabled, :boolean}]},
+    # IO write and i2c write not needed
     {:circle_dance, 0x1c, [{:side, :uint8}, {:move_time, :uint16}]},
-    {:enable_safeties, 0x1e, []},
     {:lifelike_behaviours, 0x1d, [{:force, :boolean}]},
+    {:enable_safeties, 0x1e, []},
   ]
 
   defmacro __using__(which) when is_atom(which) do

@@ -5,7 +5,7 @@ defmodule Marty.ReadState do
 
   @name __MODULE__
   @read_battery_interval 10_000
-  @read_accelerometer_interval 250
+  @read_accelerometer_interval 1_500
   @read_battery Queries.battery
   @read_accelerometer_x Queries.accelerometer(:x)
   @read_accelerometer_y Queries.accelerometer(:y)

@@ -1,5 +1,8 @@
 <p>
   <div class="controller__right-controls">
+    <p id="connected">Disconnected</p>
+    <p id="battery"></p>
+    <p><span id="x">-----</span>, <span id="y">-----</span>, <span id="z">-----</span></p>
     <p> <button id="hello">Hello?</button> </p>
     <select id="celebrate-time">
       <option>quick</option>
