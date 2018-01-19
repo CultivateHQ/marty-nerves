@@ -33,28 +33,17 @@ for (let d of directions) {
 
 let connectedElement = document.getElementById("connected")
 let batteryElement = document.getElementById("battery")
-let xElement = document.getElementById("x")
-let yElement = document.getElementById("y")
-let zElement = document.getElementById("z")
 
 let connectedState = martyState => {
   connectedElement.innerHTML = "Connected"
   if(martyState.battery != null) {
     batteryElement.innerHTML = martyState.battery.toFixed(3)
   }
-  if (martyState.accelerometer != null) {
-    x.innerHTML = martyState.accelerometer.x.toFixed(3)
-    y.innerHTML = martyState.accelerometer.y.toFixed(3)
-    z.innerHTML = martyState.accelerometer.z.toFixed(3)
-  }
 }
 
 let disconnectedState = () => {
   connectedElement.innerHTML = "Disconnected"
   batteryElement.innerHTML = "?"
-  x.innerHTML = "----"
-  y.innerHTML = "----"
-  z.innerHTML = "----"
 }
 
 channel.on("marty_state", martyState => {

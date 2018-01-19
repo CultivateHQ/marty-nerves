@@ -37,7 +37,7 @@ defmodule Marty.Connection do
       {:ok, sock} ->
         Logger.debug "Connected to Marty"
         :gen_tcp.send(sock, Commands.enable_safeties())
-        :gen_tcp.send(sock, Commands.lifelike_behaviours(true))
+        # :gen_tcp.send(sock, Commands.lifelike_behaviours(true))
         State.connected()
         {:noreply, %{s | sock: sock}}
       err ->
