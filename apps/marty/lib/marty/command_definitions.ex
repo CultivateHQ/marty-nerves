@@ -28,17 +28,6 @@ defmodule Marty.CommandDefinitions do
     apply(__MODULE__, which, [])
   end
 
-  def define_commands do
-    define_command_methods = Enum.map(@definitions, & make_command(&1))
-
-    helpers = quote do
-      def convert_bool(true), do: 1
-      def convert_bool(false), do: 0
-    end
-
-    [helpers | define_command_methods]
-  end
-
   def call_commands do
     for {name, _, arg_definitions} <- @definitions do
       params = arg_definitions
@@ -51,6 +40,18 @@ defmodule Marty.CommandDefinitions do
       end
     end
   end
+
+  def define_commands do
+    define_command_methods = Enum.map(@definitions, & make_command(&1))
+
+    helpers = quote do
+      def convert_bool(true), do: 1
+      def convert_bool(false), do: 0
+    end
+
+    [helpers | define_command_methods]
+  end
+
 
   defp calculate_command_size(args) do
     args

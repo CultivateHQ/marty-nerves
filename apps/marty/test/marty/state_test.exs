@@ -30,12 +30,10 @@ defmodule Marty.StateTest do
     assert_receive({:marty_state, %{battery: 3.45}})
   end
 
-  test "update accelerometer" do
-    connect_and_flush_notifications()
-    State.update_accelerometer(1.25, 0.0, -1.25)
-
-    assert State.accelerometer() == %State.Accelerometer{x: 1.25, y: 0.0, z: -1.25}
-    assert_receive({:marty_state, %{accelerometer: %{x: 1.25, y: 0.0, z: -1.25}}})
+  test "chat message received" do
+    State.chat_message_received("hello")
+    :sys.get_state(State)
+    assert_receive({:marty_chat, "hello"})
   end
 
   defp connect_and_flush_notifications do

@@ -30,6 +30,10 @@ defmodule Marty.State do
     GenServer.cast(@name, {:update_battery, level})
   end
 
+  def chat_message_received(msg) do
+    GenServer.cast(@name, {:chat_message_received, msg})
+  end
+
   def battery do
     GenServer.call(@name, :battery)
   end
@@ -57,6 +61,11 @@ defmodule Marty.State do
     {:noreply, %{s | battery: level}}
   end
 
+  def handle_cast({:chat_message_received, msg}, s) do
+    broadcast({:marty_chat, msg})
+    {:noreply, s}
+  end
+
   def handle_call(:connected?, _, s) do
     state_changed()
     {:reply, s.connected?, s}
@@ -67,10 +76,14 @@ defmodule Marty.State do
   end
 
   def handle_info(:state_changed, s) do
-    Registry.dispatch(Marty.State.Registry, :marty_state, fn entries ->
-      for {pid, _} <- entries, do: send(pid, {:marty_state, s})
-    end)
+    broadcast({:marty_state, s})
     {:noreply, s}
+  end
+
+  defp broadcast(event) do
+    Registry.dispatch(Marty.State.Registry, :marty_state, fn entries ->
+      for {pid, _} <- entries, do: send(pid, event)
+    end)
   end
 
   defp state_changed() do

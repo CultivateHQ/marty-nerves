@@ -33,6 +33,7 @@ for (let d of directions) {
 
 let connectedElement = document.getElementById("connected")
 let batteryElement = document.getElementById("battery")
+let chatElement = document.getElementById("chat")
 
 let connectedState = martyState => {
   connectedElement.innerHTML = "Connected"
@@ -44,6 +45,7 @@ let connectedState = martyState => {
 let disconnectedState = () => {
   connectedElement.innerHTML = "Disconnected"
   batteryElement.innerHTML = "?"
+  chatElement.innerHTML = ""
 }
 
 channel.on("marty_state", martyState => {
@@ -52,6 +54,10 @@ channel.on("marty_state", martyState => {
   }  else {
     disconnectedState()
   }
+})
+
+channel.on("marty_chat", chat => {
+  chatElement.innerHTML = chat.msg
 })
 
 

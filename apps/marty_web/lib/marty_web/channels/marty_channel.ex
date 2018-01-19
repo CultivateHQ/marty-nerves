@@ -8,7 +8,7 @@ defmodule MartyWeb.MartyChannel do
 
 
   def handle_in("hello", _, socket) do
-    Marty.hello(false)
+    Marty.hello(true)
     {:reply, :ok, socket}
   end
 
@@ -39,6 +39,11 @@ defmodule MartyWeb.MartyChannel do
 
   def handle_info({:marty_state, marty_state}, socket) do
     push socket, "marty_state", marty_state
+    {:noreply, socket}
+  end
+
+  def handle_info({:marty_chat, msg}, socket) do
+    push socket, "marty_chat", %{msg: msg}
     {:noreply, socket}
   end
 end

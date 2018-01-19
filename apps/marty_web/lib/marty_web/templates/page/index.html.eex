@@ -1,6 +1,7 @@
 <p>
   <div class="controller__right-controls">
     <p id="connected">Disconnected</p>
+    <p id="chat"></p>
     <p id="battery"></p>
     <p> <button id="hello">Hello?</button> </p>
     <select id="celebrate-time">

@@ -25,6 +25,9 @@ defmodule Marty.Connection do
     GenServer.call(@name, {:send_query, query})
   end
 
+  def poll_for_chatter do
+    GenServer.cast(@name, :poll_for_chatter)
+  end
 
   def init(_) do
     State.disconnected()
@@ -45,6 +48,16 @@ defmodule Marty.Connection do
         Process.send_after(self(), :connect, @retry_interval)
         {:noreply, s}
     end
+  end
+
+  def handle_info({:tcp, _, candidate_chat_response}, s) do
+    case Queries.read_chatter(candidate_chat_response) do
+      {:ok, msg} ->
+        State.chat_message_received(msg)
+      _ ->
+        nil
+    end
+    {:noreply, s}
   end
 
   def handle_info(msg, s) do
@@ -76,6 +89,15 @@ defmodule Marty.Connection do
         disconnect(sock)
         {:reply, {:error, :timeout}, %{s | sock: nil}}
     end
+  end
+
+  def handle_cast(:poll_for_chatter, s = %{sock: nil}) do
+    {:noreply, s}
+  end
+
+  def handle_cast(:poll_for_chatter, s = %{sock: sock}) do
+    :gen_tcp.send(sock, Queries.get_chatter)
+    {:noreply, s}
   end
 
   defp disconnect(sock) do
