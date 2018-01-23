@@ -1,14 +1,21 @@
 defmodule Marty.CommandDefinitions do
-
   @definitions [
     {:hello, 0x0, [{:force, :boolean}]},
     {:lean, 0x02, [{:direction, :uint16}, {:amount, :int8}, {:move_time, :uint16}]},
-    {:walk, 0x03, [{:steps, :uint8}, {:turn, :uint8}, {:move_time, :uint16}, {:step_length, :int8}, {:side, :uint8}]},
+    {:walk, 0x03,
+     [
+       {:steps, :uint8},
+       {:turn, :uint8},
+       {:move_time, :uint16},
+       {:step_length, :int8},
+       {:side, :uint8}
+     ]},
     {:kick, 0x05, [{:side, :int8}, {:twist, :int8}, {:move_time, :uint16}]},
     {:celebrate, 0x08, [{:move_time, :uint16}]},
     {:tap_foot, 0x0A, [{:side, :int8}]},
-    {:arms, 0x0b, [{:r_angle, :int8}, {:l_angle, :int8}, {:move_time, :uint16}]},
-    {:side_step, 0x0E, [{:side, :int8}, {:num_steps, :int8}, {:move_time, :uint16}, {:step_length, :int8}]},
+    {:arms, 0x0B, [{:r_angle, :int8}, {:l_angle, :int8}, {:move_time, :uint16}]},
+    {:side_step, 0x0E,
+     [{:side, :int8}, {:num_steps, :int8}, {:move_time, :uint16}, {:step_length, :int8}]},
     {:stand_straight, 0x0F, [{:move_time, :uint8}]},
     {:play_sound, 0x10, [{:freq_start, :uint16}, {:freq_end, :uint16}, {:duration, :uint16}]},
     {:stop, 0x11, [{:stop_type, :uint8}]},
@@ -19,9 +26,9 @@ defmodule Marty.CommandDefinitions do
     {:low_battery_cutoff, 0x17, [{:enable, :boolean}]},
     {:buzz_prevention, 0x18, [{:enabled, :boolean}]},
     # IO write and i2c write not needed
-    {:circle_dance, 0x1c, [{:side, :uint8}, {:move_time, :uint16}]},
-    {:lifelike_behaviours, 0x1d, [{:force, :boolean}]},
-    {:enable_safeties, 0x1e, []},
+    {:circle_dance, 0x1C, [{:side, :uint8}, {:move_time, :uint16}]},
+    {:lifelike_behaviours, 0x1D, [{:force, :boolean}]},
+    {:enable_safeties, 0x1E, []}
   ]
 
   defmacro __using__(which) when is_atom(which) do
@@ -30,8 +37,10 @@ defmodule Marty.CommandDefinitions do
 
   def call_commands do
     for {name, _, arg_definitions} <- @definitions do
-      params = arg_definitions
-      |> Enum.map(fn {a, _} -> Macro.var(a, nil) end)
+      params =
+        arg_definitions
+        |> Enum.map(fn {a, _} -> Macro.var(a, nil) end)
+
       quote do
         def unquote(:"#{name}")(unquote_splicing(params)) do
           command = apply(Marty.Commands, unquote(name), unquote(params))
@@ -42,16 +51,16 @@ defmodule Marty.CommandDefinitions do
   end
 
   def define_commands do
-    define_command_methods = Enum.map(@definitions, & make_command(&1))
+    define_command_methods = Enum.map(@definitions, &make_command(&1))
 
-    helpers = quote do
-      def convert_bool(true), do: 1
-      def convert_bool(false), do: 0
-    end
+    helpers =
+      quote do
+        def convert_bool(true), do: 1
+        def convert_bool(false), do: 0
+      end
 
     [helpers | define_command_methods]
   end
-
 
   defp calculate_command_size(args) do
     args
@@ -66,6 +75,7 @@ defmodule Marty.CommandDefinitions do
   defp quoted_command_param({name, :boolean}) do
     "convert_bool(#{name})::size(8)"
   end
+
   defp quoted_command_param({name, type}) do
     "#{name}::#{command_param_type(type)}"
   end
@@ -81,14 +91,14 @@ defmodule Marty.CommandDefinitions do
   end
 
   defp make_command({name, opcode, args}) do
-    function_params = args
-    |> Enum.map(fn {a, _} -> Macro.var(a, nil) end)
+    function_params =
+      args
+      |> Enum.map(fn {a, _} -> Macro.var(a, nil) end)
 
     size = calculate_command_size(args)
 
     command = "<<0x2,#{size}::size(16)-little,#{opcode},#{command_params(args)}>>"
     quoted_command = Code.string_to_quoted!(command)
-
 
     quote do
       def unquote(name)(unquote_splicing(function_params)) do
