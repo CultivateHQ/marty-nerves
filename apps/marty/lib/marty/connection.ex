@@ -8,6 +8,7 @@ defmodule Marty.Connection do
   @name __MODULE__
 
   @marty_ip {10, 0, 0, 49}
+  # @marty_ip {192, 168, 162, 222}
   @marty_port 24
 
   @connect_timeout 1_000
@@ -57,8 +58,7 @@ defmodule Marty.Connection do
       {:ok, msg} ->
         State.chat_message_received(msg)
 
-      e ->
-        IO.inspect(e)
+      _ ->
         nil
     end
 

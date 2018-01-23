@@ -18,7 +18,7 @@ defmodule MartyWeb.WalkModifiers do
     {:walk, [steps,
              turn(direction),
              duration(speed, steps),
-             100,
+             stride(direction),
              4]}
   end
 
@@ -32,4 +32,9 @@ defmodule MartyWeb.WalkModifiers do
   defp duration("fast", steps), do: steps * 500
   defp duration("medium", steps), do: steps * 1_000
   defp duration(_, steps), do: steps * 2_000
+
+
+  defp stride(["back", _]), do: -100
+  defp stride(["back"]), do: -100
+  defp stride(_), do: 100
 end

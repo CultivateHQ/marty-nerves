@@ -9,9 +9,9 @@ defmodule MartyWeb.WalkModifiersTest do
     assert to_params("forward-right", "medium", "3") == {:walk, [3, -100, 3_000, 100, 4]}
 
 
-    assert to_params("back", "medium", "3") == {:walk, [3, 0, 3_000, 100, 4]}
-    assert to_params("back-left", "medium", "3") == {:walk, [3, 100, 3_000, 100, 4]}
-    assert to_params("back-right", "medium", "3") == {:walk, [3, -100, 3_000, 100, 4]}
+    assert to_params("back", "medium", "3") == {:walk, [3, 0, 3_000, -100, 4]}
+    assert to_params("back-left", "medium", "3") == {:walk, [3, 100, 3_000, -100, 4]}
+    assert to_params("back-right", "medium", "3") == {:walk, [3, -100, 3_000, -100, 4]}
   end
 
   test "side-step direction" do
