@@ -99,6 +99,10 @@ button.direction {
     padding: 0.5em 1em;
 }
 
+button.direction:active {
+  background: #444;
+}
+
 .controller__steps input[type=number] {
     font-size: 16px;
     padding: 0.5em 1em;

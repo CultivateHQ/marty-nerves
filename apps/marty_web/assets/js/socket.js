@@ -11,24 +11,36 @@ channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
+let speedSelect = document.getElementById("speed")
+let stepsSelect = document.getElementById("steps")
+
 
 document.getElementById("hello").addEventListener("click", e => {
   channel.push("hello", {})
 })
 
-let celebrateSelect = document.getElementById("celebrate-time")
 document.getElementById("celebrate").addEventListener("click", e => {
-  channel.push("celebrate", {duration: celebrateSelect.value})
+  channel.push("celebrate", {duration: speedSelect.value})
 })
 
-const directions = ["forward", "back", "left", "right"]
+const directions = ["forward-left", "forward", "forward-right",
+                    "side-left", "side-right",
+                    "back-left", "back", "back-right"]
 
 for (let d of directions) {
   let button = document.getElementById(`move-${d}`)
   button.addEventListener("click", e => {
-    channel.push("walk", {direction: d})
+    channel.push("walk", {
+      direction: d,
+      speed: speedSelect.value,
+      steps: stepsSelect.value
+    })
   })
 }
+
+document.getElementById("move-stop").addEventListener("click", e => {
+  channel.push("stop", {})
+})
 
 
 let connectedElement = document.getElementById("connected")
