@@ -1,7 +1,7 @@
 defmodule MartyWeb.MartyChannel do
   use MartyWeb, :channel
 
-  alias MartyWeb.WalkModifiers
+  alias MartyWeb.WalkCommand
 
   @marty Application.get_env(:marty_channel, :marty, Marty)
 
@@ -33,7 +33,7 @@ defmodule MartyWeb.MartyChannel do
   end
 
   def handle_in("walk", %{"direction" => direction, "speed" => speed, "steps" => steps}, socket) do
-    {f, a} = WalkModifiers.to_params(direction, speed, steps)
+    {f, a} = WalkCommand.to_walk_command(direction, speed, steps)
     apply(@marty, f, a)
     {:reply, :ok, socket}
   end
