@@ -6,7 +6,7 @@ defmodule Marty.ReadState do
   @name __MODULE__
   @read_battery_interval 10_000
   @poll_for_chatter_interval 5_000
-  @read_battery Queries.battery
+  @read_battery Queries.battery()
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, {}, name: @name)

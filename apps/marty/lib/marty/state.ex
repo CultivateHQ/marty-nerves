@@ -48,7 +48,7 @@ defmodule Marty.State do
 
   def handle_cast(:connected, s) do
     state_changed()
-    {:noreply, %{s |connected?: true}}
+    {:noreply, %{s | connected?: true}}
   end
 
   def handle_cast(:disconnected, _s) do

@@ -14,7 +14,6 @@ defmodule Marty.Connection do
   @retry_interval 5_000
   @query_timeout 500
 
-
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{}, name: @name)
   end
@@ -40,13 +39,14 @@ defmodule Marty.Connection do
   def handle_info(:connect, s) do
     case gen_tcp().connect(@marty_ip, @marty_port, @connect_timeout) do
       {:ok, sock} ->
-        Logger.debug "Connected to Marty"
+        Logger.debug("Connected to Marty")
         gen_tcp().tcp_send(sock, Commands.enable_safeties())
         gen_tcp().tcp_send(sock, Commands.lifelike_behaviours(true))
         State.connected()
         {:noreply, %{s | sock: sock}}
+
       err ->
-        Logger.debug fn -> "Failed to connect to Marty: #{inspect(err)}" end
+        Logger.debug(fn -> "Failed to connect to Marty: #{inspect(err)}" end)
         Process.send_after(self(), :connect, @retry_interval)
         {:noreply, s}
     end
@@ -56,15 +56,17 @@ defmodule Marty.Connection do
     case Queries.read_chatter(candidate_chat_response) do
       {:ok, msg} ->
         State.chat_message_received(msg)
+
       e ->
-        IO.inspect e
+        IO.inspect(e)
         nil
     end
+
     {:noreply, s}
   end
 
   def handle_info(msg, s) do
-    Logger.debug fn -> "Unexpected message:  #{inspect msg}" end
+    Logger.debug(fn -> "Unexpected message:  #{inspect(msg)}" end)
     {:noreply, s}
   end
 
@@ -83,6 +85,7 @@ defmodule Marty.Connection do
 
   def handle_call({:send_query, query}, _, s = %{sock: sock}) do
     gen_tcp().tcp_send(sock, query)
+
     receive do
       {:tcp, ^sock, res} when length(res) == 4 ->
         {:reply, {:ok, Queries.decode_result(res)}, s}
@@ -99,7 +102,7 @@ defmodule Marty.Connection do
   end
 
   def handle_cast(:poll_for_chatter, s = %{sock: sock}) do
-    gen_tcp().tcp_send(sock, Queries.get_chatter)
+    gen_tcp().tcp_send(sock, Queries.get_chatter())
     {:noreply, s}
   end
 

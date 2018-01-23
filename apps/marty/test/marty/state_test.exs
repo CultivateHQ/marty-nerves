@@ -9,7 +9,7 @@ defmodule Marty.StateTest do
 
   test "connecting" do
     State.connected()
-    assert State.connected?
+    assert State.connected?()
     assert_receive({:marty_state, %{connected?: true}})
   end
 
@@ -17,7 +17,7 @@ defmodule Marty.StateTest do
     connect_and_flush_notifications()
 
     State.disconnected()
-    refute State.connected?
+    refute State.connected?()
 
     assert_receive({:marty_state, %{connected?: false}})
   end

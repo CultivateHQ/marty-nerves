@@ -12,7 +12,7 @@ defmodule Marty.CommandsTest do
       {:kick, 0x05, [1, 100, 5_000]},
       {:celebrate, 0x08, [123]},
       {:tap_foot, 0x0A, [1]},
-      {:arms, 0x0b, [100, -100, 5_000]},
+      {:arms, 0x0B, [100, -100, 5_000]},
       {:side_step, 0x0E, [1, 3, 4, 100]},
       {:stand_straight, 0x0F, [2_000]},
       {:play_sound, 0x10, [100, -100, 5_000]},
@@ -22,15 +22,17 @@ defmodule Marty.CommandsTest do
       {:motor_protection, 0x16, [true]},
       {:low_battery_cutoff, 0x17, [true]},
       {:buzz_prevention, 0x18, [true]},
-      {:circle_dance, 0x1c, [1, 5_000]},
-      {:lifelike_behaviours, 0x1d, [true]},
-      {:enable_safeties, 0x1e, []},
+      {:circle_dance, 0x1C, [1, 5_000]},
+      {:lifelike_behaviours, 0x1D, [true]},
+      {:enable_safeties, 0x1E, []}
     ]
 
     for {f, opcode, a} <- commands do
       test "#{f} with #{inspect(a)}" do
-        assert command = <<command_code::size(8), reported_length::size(16)-little, opcode::size(8), _::binary>> =
-          apply(Commands, unquote(f), unquote(a))
+        assert command =
+                 <<command_code::size(8), reported_length::size(16)-little, opcode::size(8),
+                   _::binary>> = apply(Commands, unquote(f), unquote(a))
+
         assert command_code == 0x02
         assert opcode == unquote(opcode)
         assert reported_length == byte_size(command) - 3

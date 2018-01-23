@@ -20,7 +20,7 @@ defmodule Marty.QueriesTest do
   test "decode result" do
     assert 0.0 == Queries.decode_result([0, 0, 0, 0])
 
-    assert_in_delta Queries.decode_result([154, 233, 118, 68]),  987.65, 0.001
+    assert_in_delta Queries.decode_result([154, 233, 118, 68]), 987.65, 0.001
   end
 
   test "read_chatter" do
@@ -31,5 +31,4 @@ defmodule Marty.QueriesTest do
     assert :not_chatter == Queries.read_chatter([34, 35, 36, 37] ++ 'hello' ++ [1])
     assert :not_chatter == Queries.read_chatter([34, 35, 36, 37] ++ 'hell' ++ [1, 0])
   end
-
 end
