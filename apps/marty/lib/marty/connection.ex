@@ -3,8 +3,9 @@ defmodule Marty.Connection do
   alias Marty.{Commands, Queries, State}
   require Logger
 
+  import NetTransport.GenTcp, only: [gen_tcp: 0]
+
   @name __MODULE__
-  @gen_tcp NetTransport.GenTcp.impl()
 
   @marty_ip {10, 0, 0, 49}
   @marty_port 24
@@ -37,11 +38,11 @@ defmodule Marty.Connection do
   end
 
   def handle_info(:connect, s) do
-    case @gen_tcp.connect(@marty_ip, @marty_port, @connect_timeout) do
+    case gen_tcp().connect(@marty_ip, @marty_port, @connect_timeout) do
       {:ok, sock} ->
         Logger.debug "Connected to Marty"
-        @gen_tcp.tcp_send(sock, Commands.enable_safeties())
-        @gen_tcp.tcp_send(sock, Commands.lifelike_behaviours(true))
+        gen_tcp().tcp_send(sock, Commands.enable_safeties())
+        gen_tcp().tcp_send(sock, Commands.lifelike_behaviours(true))
         State.connected()
         {:noreply, %{s | sock: sock}}
       err ->
@@ -76,12 +77,12 @@ defmodule Marty.Connection do
   end
 
   def handle_call({:send_command, command}, _, s = %{sock: sock}) do
-    result = @gen_tcp.tcp_send(sock, command)
+    result = gen_tcp().tcp_send(sock, command)
     {:reply, result, s}
   end
 
   def handle_call({:send_query, query}, _, s = %{sock: sock}) do
-    @gen_tcp.tcp_send(sock, query)
+    gen_tcp().tcp_send(sock, query)
     receive do
       {:tcp, ^sock, res} when length(res) == 4 ->
         {:reply, {:ok, Queries.decode_result(res)}, s}
@@ -98,12 +99,12 @@ defmodule Marty.Connection do
   end
 
   def handle_cast(:poll_for_chatter, s = %{sock: sock}) do
-    @gen_tcp.tcp_send(sock, Queries.get_chatter)
+    gen_tcp().tcp_send(sock, Queries.get_chatter)
     {:noreply, s}
   end
 
   defp disconnect(sock) do
     State.disconnected()
-    @gen_tcp.close(sock)
+    gen_tcp().close(sock)
   end
 end

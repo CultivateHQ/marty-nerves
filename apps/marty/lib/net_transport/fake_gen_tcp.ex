@@ -2,8 +2,8 @@ defmodule NetTransport.FakeGenTcp do
   use GenServer
   @behaviour NetTransport.GenTcp
 
-  defstruct client: nil, log: :queue.new()
-  @type t :: %__MODULE__{client: pid, log: :queue.t}
+  defstruct client: nil, log: []
+  @type t :: %__MODULE__{client: pid, log: []}
 
   @chat String.to_charlist("aaaaHello matey.") ++ [0]
 
@@ -27,6 +27,19 @@ defmodule NetTransport.FakeGenTcp do
     GenServer.cast(pid, {:get, opcode, arg})
   end
 
+  def clear_log(pid) do
+    GenServer.cast(pid, :clear_log)
+  end
+
+  def log(pid) do
+    GenServer.call(pid, :log)
+  end
+
+  def connection_socket do
+    %{sock: sock} = :sys.get_state(Marty.Connection)
+    sock
+  end
+
   def init(client) do
     {:ok, %__MODULE__{client: client}}
   end
@@ -36,16 +49,24 @@ defmodule NetTransport.FakeGenTcp do
   end
 
   def handle_cast({:send_command, command}, s = %{log: log}) do
-    {:noreply, %{s | log: :queue.in(command, log)}}
+    {:noreply, %{s | log: [command | log]}}
   end
 
   def handle_cast(:get_chat, s = %{client: client, log: log}) do
     send(client, {:tcp, self(), @chat})
-    {:noreply, %{s | log: :queue.in(:get_chat, log)}}
+    {:noreply, %{s | log: [:get_chat | log]}}
   end
 
   def handle_cast({:get, opcode, arg}, s = %{log: log, client: client}) do
     send(client, {:tcp, self(), [219, 15, 73, 64]})
-    {:noreply, %{s | log: :queue.in({:get, opcode, arg}, log)}}
+    {:noreply, %{s | log: [{:get, opcode, arg} | log]}}
+  end
+
+  def handle_cast(:clear_log, s) do
+    {:noreply, %{s | log: []}}
+  end
+
+  def handle_call(:log, _, s = %{log: log}) do
+    {:reply, Enum.reverse(log), s}
   end
 end

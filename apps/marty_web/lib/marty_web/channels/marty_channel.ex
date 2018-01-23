@@ -10,7 +10,6 @@ defmodule MartyWeb.MartyChannel do
     {:ok, socket}
   end
 
-
   def handle_in("hello", _, socket) do
     @marty.hello(true)
     {:reply, :ok, socket}
@@ -22,31 +21,30 @@ defmodule MartyWeb.MartyChannel do
   end
 
   def handle_in("celebrate", %{"duration" => duration}, socket) do
-    celebration_time = case duration do
-                        "quick" -> 1_000
-                        "slow" -> 15_000
-                        _ -> 5_000
-                      end
+    celebration_time =
+      case duration do
+        "quick" -> 1_000
+        "slow" -> 15_000
+        _ -> 5_000
+      end
+
     @marty.celebrate(celebration_time)
     {:reply, :ok, socket}
   end
 
-  def handle_in("walk", %{"direction" => direction,
-                          "speed" => speed,
-                          "steps" => steps}, socket) do
-
-    {f,a} = WalkModifiers.to_params(direction, speed, steps)
+  def handle_in("walk", %{"direction" => direction, "speed" => speed, "steps" => steps}, socket) do
+    {f, a} = WalkModifiers.to_params(direction, speed, steps)
     apply(@marty, f, a)
     {:reply, :ok, socket}
   end
 
   def handle_info({:marty_state, marty_state}, socket) do
-    push socket, "marty_state", marty_state
+    push(socket, "marty_state", marty_state)
     {:noreply, socket}
   end
 
   def handle_info({:marty_chat, msg}, socket) do
-    push socket, "marty_chat", %{msg: msg}
+    push(socket, "marty_chat", %{msg: msg})
     {:noreply, socket}
   end
 end

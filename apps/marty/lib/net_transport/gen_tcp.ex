@@ -1,5 +1,5 @@
 defmodule NetTransport.GenTcp do
-  def impl do
+  def gen_tcp do
     Application.get_env(:marty, :gen_tcp_impl, NetTransport.RealGenTcp)
   end
 
