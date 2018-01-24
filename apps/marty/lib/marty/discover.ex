@@ -12,7 +12,7 @@ defmodule Marty.Discover do
 
   @poll_interval 3_000
 
-  defstruct socket: nil, marty_ip: nil
+  defstruct socket: nil
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, nil, name: @name)

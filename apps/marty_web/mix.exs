@@ -44,6 +44,7 @@ defmodule MartyWeb.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:marty, in_umbrella: true},
+      {:image_server, in_umbrella: true},
     ]
   end
 

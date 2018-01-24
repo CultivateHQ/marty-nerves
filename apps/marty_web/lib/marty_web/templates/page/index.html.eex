@@ -7,10 +7,10 @@
             <i class="fa fa-arrows"></i> Movement</h2>
         </td>
       </tr>
-      <%= for control_row <- control_row_definitions do %>
+      <%= for control_row <- control_row_definitions() do %>
         <tr>
           <%= for {dir, entity} <- control_row do %>
-            <td><button class="direction" id="move-<%= dir %>">&<%= entity %>;</button>
+            <td><button class="direction" id="move-<%= dir %>">&<%= entity %>;</button></td>
           <% end %>
         </tr>
       <% end %>

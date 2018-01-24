@@ -118,3 +118,8 @@ button.direction:active {
   margin-top: 2rem;
   text-align: center;
 }
+
+.camera {
+  margin: 20px auto;
+  display: table;
+}

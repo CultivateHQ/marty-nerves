@@ -32,20 +32,20 @@ defmodule Marty.Connection do
     State.disconnected()
     Discover.subscribe()
 
-    {:ok, %{sock: nil, marty_ip: nil}}
+    {:ok, %{sock: nil, marty_ip: nil, marty_name: nil}}
   end
 
   def handle_info({:marty_discover, {marty_ip, marty_name}}, s = %{sock: nil}) do
     case connect(marty_ip) do
       {:ok, sock} ->
         State.connected()
-        Logger.debug(fn -> "Connected to #{marty_name} on #{inspect(marty_ip)}" end)
+        Logger.info (fn -> "Connected to #{marty_name} on #{inspect(marty_ip)}" end)
         {:noreply, %{s | sock: sock, marty_ip: marty_ip}}
 
       err ->
         State.disconnected()
 
-        Logger.debug(fn ->
+        Logger.warn(fn ->
           "Failed to connect to #{marty_name} on %{inspect(marty_ip)}: #{inspect(err)}"
         end)
 
