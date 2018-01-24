@@ -1,18 +1,15 @@
 defmodule Marty.Connection do
   use GenServer
-  alias Marty.{Commands, Queries, State}
+  alias Marty.{Commands, Queries, State, Discover}
   require Logger
 
   import NetTransport.GenTcp, only: [gen_tcp: 0]
 
   @name __MODULE__
 
-  @marty_ip {10, 0, 0, 49}
-  # @marty_ip {192, 168, 162, 222}
   @marty_port 24
 
   @connect_timeout 1_000
-  @retry_interval 5_000
   @query_timeout 500
 
   def start_link(_) do
@@ -33,24 +30,31 @@ defmodule Marty.Connection do
 
   def init(_) do
     State.disconnected()
-    send(self(), :connect)
-    {:ok, %{sock: nil}}
+    Discover.subscribe()
+
+    {:ok, %{sock: nil, marty_ip: nil}}
   end
 
-  def handle_info(:connect, s) do
-    case gen_tcp().connect(@marty_ip, @marty_port, @connect_timeout) do
+  def handle_info({:marty_discover, {marty_ip, marty_name}}, s = %{sock: nil}) do
+    case connect(marty_ip) do
       {:ok, sock} ->
-        Logger.debug("Connected to Marty")
-        gen_tcp().tcp_send(sock, Commands.enable_safeties())
-        gen_tcp().tcp_send(sock, Commands.lifelike_behaviours(true))
         State.connected()
-        {:noreply, %{s | sock: sock}}
+        Logger.debug(fn -> "Connected to #{marty_name} on #{inspect(marty_ip)}" end)
+        {:noreply, %{s | sock: sock, marty_ip: marty_ip}}
 
       err ->
-        Logger.debug(fn -> "Failed to connect to Marty: #{inspect(err)}" end)
-        Process.send_after(self(), :connect, @retry_interval)
-        {:noreply, s}
+        State.disconnected()
+
+        Logger.debug(fn ->
+          "Failed to connect to #{marty_name} on %{inspect(marty_ip)}: #{inspect(err)}"
+        end)
+
+        {:noreply, %{s | sock: nil, marty_name: nil}}
     end
+  end
+
+  def handle_info({:marty_discover, _}, s) do
+    {:noreply, s}
   end
 
   def handle_info({:tcp, _, candidate_chat_response}, s) do
@@ -91,7 +95,6 @@ defmodule Marty.Connection do
         {:reply, {:ok, Queries.decode_result(res)}, s}
     after
       @query_timeout ->
-        Process.send_after(self(), :connect, @retry_interval)
         disconnect(sock)
         {:reply, {:error, :timeout}, %{s | sock: nil}}
     end
@@ -109,5 +112,18 @@ defmodule Marty.Connection do
   defp disconnect(sock) do
     State.disconnected()
     gen_tcp().close(sock)
+  end
+
+  defp connect(ip) do
+    case gen_tcp().connect(ip, @marty_port, @connect_timeout) do
+      {:ok, sock} ->
+        gen_tcp().tcp_send(sock, Commands.enable_safeties())
+        gen_tcp().tcp_send(sock, Commands.lifelike_behaviours(true))
+        {:ok, sock}
+
+      err ->
+        Logger.debug(fn -> "Failed to connect to Marty: #{inspect(err)}" end)
+        err
+    end
   end
 end

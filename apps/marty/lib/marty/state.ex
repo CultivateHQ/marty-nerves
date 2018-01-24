@@ -5,6 +5,8 @@ defmodule Marty.State do
 
   use GenServer
 
+  alias Marty.Events
+
   @name __MODULE__
 
   defstruct connected?: false, battery: nil
@@ -19,7 +21,7 @@ defmodule Marty.State do
   end
 
   def subscribe() do
-    Registry.register(Marty.State.Registry, :marty_state, [])
+    Events.subscribe(:marty_state)
   end
 
   def connected do
@@ -62,7 +64,7 @@ defmodule Marty.State do
   end
 
   def handle_cast({:chat_message_received, msg}, s) do
-    broadcast({:marty_chat, msg})
+    Events.broadcast(:marty_state, {:marty_chat, msg})
     {:noreply, s}
   end
 
@@ -76,14 +78,8 @@ defmodule Marty.State do
   end
 
   def handle_info(:state_changed, s) do
-    broadcast({:marty_state, s})
+    Events.broadcast(:marty_state, {:marty_state, s})
     {:noreply, s}
-  end
-
-  defp broadcast(event) do
-    Registry.dispatch(Marty.State.Registry, :marty_state, fn entries ->
-      for {pid, _} <- entries, do: send(pid, event)
-    end)
   end
 
   defp state_changed() do
