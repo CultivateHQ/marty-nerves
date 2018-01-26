@@ -56,8 +56,8 @@ defmodule Marty.Discover do
       {:ok, {marty_ip, _, marty_name}} ->
         Events.broadcast(:marty_discover, {:marty_discover, {marty_ip, marty_name}})
 
-      {:error, reason} ->
-        Logger.debug(fn -> inspect({:marty_discover_err, reason}) end)
+      {:error, _reason} ->
+        nil
     end
   end
 end

@@ -41,7 +41,6 @@ defmodule Marty.Connection do
         State.connected()
         Logger.info (fn -> "Connected to #{marty_name} on #{inspect(marty_ip)}" end)
         {:noreply, %{s | sock: sock, marty_ip: marty_ip}}
-
       err ->
         State.disconnected()
 
