@@ -1,6 +1,9 @@
 defmodule Camera.FakeCam do
   @moduledoc """
-  Just returns a picture of a chicken
+  Just returns a picture of a chicken(*).
+
+
+  (*) It's not really a chicken. It's a jumping stick-person.
   """
   use GenServer
   @behaviour Camera.Cam
