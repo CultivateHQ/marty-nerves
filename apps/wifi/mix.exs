@@ -10,7 +10,7 @@ defmodule Wifi.Mixfile do
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.5",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end
@@ -18,7 +18,7 @@ defmodule Wifi.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      applications: [:logger | other_applications(Mix.env)],
+      applications: [:logger | other_applications(Mix.env())],
       mod: {Wifi.Application, []}
     ]
   end
@@ -29,7 +29,7 @@ defmodule Wifi.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:nerves_network, "~> 0.3.4"},
+      {:nerves_network, "~> 0.3.4"}
     ]
   end
 end

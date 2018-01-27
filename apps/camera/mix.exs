@@ -10,7 +10,7 @@ defmodule Camera.Mixfile do
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.5",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end
@@ -26,7 +26,7 @@ defmodule Camera.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:picam, "~> 0.1"},
+      {:picam, "~> 0.1"}
     ]
   end
 end

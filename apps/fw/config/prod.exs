@@ -8,5 +8,5 @@ config :bootloader,
 
 config :nerves_firmware_ssh,
   authorized_keys: [
-    File.read!(Path.join(System.user_home!, ".ssh/id_rsa.pub"))
+    File.read!(Path.join(System.user_home!(), ".ssh/id_rsa.pub"))
   ]

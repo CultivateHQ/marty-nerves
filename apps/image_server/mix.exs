@@ -26,7 +26,7 @@ defmodule ImageServer.MixProject do
     [
       {:plug, ">= 0.0.0"},
       {:cowboy, "~> 1.0"},
-      {:camera, in_umbrella: true},
+      {:camera, in_umbrella: true}
     ]
   end
 end

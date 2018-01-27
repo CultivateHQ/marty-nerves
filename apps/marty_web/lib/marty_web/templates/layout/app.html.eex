@@ -23,7 +23,7 @@
 
     </div> <!-- /container -->
     <div class="camera">
-      <%= img_tag("images/placeholder.gif", id: "cam",) %>
+      <%= img_tag("images/placeholder.gif", id: "cam") %>
     </div>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>

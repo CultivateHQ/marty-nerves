@@ -20,20 +20,20 @@ defmodule MartyWeb.MartyChannelTest do
   end
 
   test "hello", %{socket: socket, fake_tcp: fake_tcp} do
-    ref = push socket, "hello", %{}
-    assert_reply ref, :ok
+    ref = push(socket, "hello", %{})
+    assert_reply(ref, :ok)
     assert FakeGenTcp.log(fake_tcp) == [Commands.hello(true)]
   end
 
   test "stop", %{socket: socket, fake_tcp: fake_tcp} do
-    ref = push socket, "stop", %{}
-    assert_reply ref, :ok
+    ref = push(socket, "stop", %{})
+    assert_reply(ref, :ok)
     assert FakeGenTcp.log(fake_tcp) == [Commands.stop(3)]
   end
 
   test "walk", %{socket: socket, fake_tcp: fake_tcp} do
-    ref = push socket, "walk", %{direction: "forward", speed: "medium", "steps": 3}
-    assert_reply ref, :ok
+    ref = push(socket, "walk", %{direction: "forward", speed: "medium", steps: 3})
+    assert_reply(ref, :ok)
     assert FakeGenTcp.log(fake_tcp) == [Commands.walk(3, 0, 2_000, 50, 4)]
   end
 end

@@ -10,10 +10,10 @@ defmodule MartyWeb.Mixfile do
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.4",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
-      aliases: aliases(Mix.env),
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
+      aliases: aliases(Mix.env()),
       deps: deps()
     ]
   end
@@ -30,7 +30,7 @@ defmodule MartyWeb.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -44,14 +44,15 @@ defmodule MartyWeb.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:marty, in_umbrella: true},
-      {:image_server, in_umbrella: true},
+      {:image_server, in_umbrella: true}
     ]
   end
 
   def aliases(:prod) do
     [
-      "compile": ["compile", "brunch_build", "phx.digest"]
+      compile: ["compile", "brunch_build", "phx.digest"]
     ]
   end
+
   def aliases(_), do: []
 end
