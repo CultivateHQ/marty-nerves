@@ -1,52 +1,102 @@
-<div class="controller__right-controls">
-  <table>
-    <tbody>
-      <tr>
-        <td colspan="3">
-          <h2 class="controller__title">
-            <i class="fa fa-arrows"></i> Movement</h2>
-        </td>
-      </tr>
-      <%= for control_row <- control_row_definitions() do %>
+<div class="controller">
+
+  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+  <div class="controller__right-controls">
+    <table>
+      <tbody>
         <tr>
-          <%= for {dir, entity} <- control_row do %>
-            <td><button class="direction" id="move-<%= dir %>">&<%= entity %>;</button></td>
-          <% end %>
+          <td colspan="3">
+            <h2 class="controller__title">
+              <i class="fa fa-arrows"></i> Movement</h2>
+          </td>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+        <%= for control_row <- control_row_definitions() do %>
+          <tr>
+            <%= for {dir, entity} <- control_row do %>
+              <td><button class="direction" id="move-<%= dir %>">&<%= entity %>;</button></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td colspan="4">
+            <h2 class="controller__title">
+              <i class="fa fa-arrows"></i>Kick
+            </h2>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <select id="kick-twist">
+              <%= for kick_twist <- -10..10 do %>
+                <%
+                selected = if kick_twist == 0 do
+                "selected"
+                else
+                ""
+                end %>
+
+                <option value="<%= kick_twist * 10 %>" <%= selected %>>Twist <%= kick_twist * 10 %></option>
+              <%= end %>
+            </select>
+          </td>
+          <td>
+            <select id="kick-speed">
+              <option value="slow">slow</option>
+              <option value="medium" selected>medium</option>
+              <option value="fast">fast</option>
+            </select>
+          </td>
+          <td>
+            <button class="xdirection" id="kick-left">L</button>
+            <button class="xdirection" id="kick-right">R</button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="controller__left-controls">
+    <p>
+      <select id="speed">
+        <option value="slow">Slow</option>
+        <option value="medium" selected>Medium</option>
+        <option value="fast">Fast</option>
+      </select>
+      <select id="steps">
+        <%= for steps <- [1, 2, 3, 5, 8, 13, 21, 44, 65, 109] do %>
+          <%
+          selected = if steps == 3 do
+          "selected"
+          else
+          ""
+          end
+
+          %>
+
+          <option value="<%= steps %>" <%= selected %>><%= steps %> step</option>
+        <% end %>
+      </select>
+    </p>
+    <hr/>
+    <p>
+      <button id="celebrate">Celebrate</button>
+      <button id="hello">Reset</button>
+    </p>
+    <hr/>
+    <p id="connected">Disconnected</p>
+    <p id="battery"></p>
+    <hr/>
+    <p id="chat"></p>
+  </div>
+
+
 </div>
-<div class="controller__left-controls">
-  <p>
-    <select id="speed">
-      <option value="slow">Slow</option>
-      <option value="medium" selected>Medium</option>
-      <option value="fast">Fast</option>
-    </select>
-    <select id="steps">
-      <%= for steps <- [1, 2, 3, 5, 8, 13, 21, 44, 65, 109] do %>
-        <%
-        selected = if steps == 3 do
-        "selected"
-        else
-        ""
-        end
-
-        %>
-
-        <option value="<%= steps %>" <%= selected %>><%= steps %> step</option>
-      <% end %>
-    </select>
-  </p>
-  <hr/>
-  <p>
-    <button id="celebrate">Celebrate</button>
-    <button id="hello">Reset</button>
-  </p>
-  <hr/>
-  <p id="connected">Disconnected</p>
-  <p id="battery"></p>
-  <hr/>
-  <p id="chat"></p>
+<div class="camera">
+  <%= img_tag("images/placeholder.gif", id: "cam") %>
 </div>

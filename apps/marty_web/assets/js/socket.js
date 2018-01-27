@@ -14,6 +14,9 @@ channel.join()
 let speedSelect = document.getElementById("speed")
 let stepsSelect = document.getElementById("steps")
 
+let kickSpeedSelect = document.getElementById("kick-speed")
+let kickTwistSelect = document.getElementById("kick-twist")
+
 
 document.getElementById("hello").addEventListener("click", e => {
   channel.push("hello", {})
@@ -21,6 +24,20 @@ document.getElementById("hello").addEventListener("click", e => {
 
 document.getElementById("celebrate").addEventListener("click", e => {
   channel.push("celebrate", {duration: speedSelect.value})
+})
+
+let kick  = foot => {
+  let kickSpeed = kickSpeedSelect.value
+  let kickTwist = kickTwistSelect.value
+  channel.push("kick", {foot: foot, speed: kickSpeed, twist: kickTwist})
+}
+
+document.getElementById("kick-left").addEventListener("click", e => {
+  kick("left")
+})
+
+document.getElementById("kick-right").addEventListener("click", e => {
+  kick("right")
 })
 
 const directions = ["forward-left", "forward", "forward-right",
@@ -71,6 +88,3 @@ channel.on("marty_state", martyState => {
 channel.on("marty_chat", chat => {
   chatElement.innerHTML = chat.msg
 })
-
-
-export default socket

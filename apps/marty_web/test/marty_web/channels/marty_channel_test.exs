@@ -36,4 +36,10 @@ defmodule MartyWeb.MartyChannelTest do
     assert_reply(ref, :ok)
     assert FakeGenTcp.log(fake_tcp) == [Commands.walk(3, 0, 2_000, 50, 4)]
   end
+
+  test "kick", %{socket: socket, fake_tcp: fake_tcp} do
+    ref = push(socket, "kick", %{foot: "left", speed: "fast", twist: 10})
+    assert_reply(ref, :ok)
+    assert FakeGenTcp.log(fake_tcp) == [Commands.kick(0, 10, 1_500)]
+  end
 end
