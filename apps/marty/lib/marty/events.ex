@@ -1,4 +1,8 @@
 defmodule Marty.Events do
+  @moduledoc """
+  Subscribe and receive Marty related events.
+  """
+
   def subscribe(topic) do
     Registry.register(Marty.Event.Registry, topic, [])
   end

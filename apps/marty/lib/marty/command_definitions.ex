@@ -1,4 +1,31 @@
 defmodule Marty.CommandDefinitions do
+  @moduledoc """
+  Define the commands from http://docs.robotical.io/hardware/esp-socket-api/ and
+  generates function from the definitions.
+
+  Usage:
+
+  ```
+  use Marty.CommandDefinitions, :call_commands
+  ```
+
+  Defines a function for each command, that takes the requisite number orguments
+  and sends the command to the connected Marty. See the `Marty` module.
+
+
+  eg `Marty.tap_foot(0)` taps the left foot.
+
+
+  ```
+  use Marty.CommandDefinitions, :define_commands
+  ```
+
+  Defines a function for each command that returns the binary to be sent to Marty. See `Marty.Commands`
+
+  eg `Marty.Commands.tap_foot(0)` returns `<<2, 2, 0, 10, 0>>`
+
+  """
+
   @definitions [
     {:hello, 0x0, [{:force, :boolean}]},
     {:lean, 0x02, [{:direction, :uint16}, {:amount, :int8}, {:move_time, :uint16}]},
@@ -88,7 +115,7 @@ defmodule Marty.CommandDefinitions do
   defp command_params(args) do
     args
     |> Enum.map(&quoted_command_param/1)
-    |> Enum.join(",")
+    |> Enum.join(", ")
   end
 
   defp make_command({name, opcode, args}) do
@@ -98,7 +125,7 @@ defmodule Marty.CommandDefinitions do
 
     size = calculate_command_size(args)
 
-    command = "<<0x2,#{size}::size(16)-little,#{opcode},#{command_params(args)}>>"
+    command = "<<0x2, #{size}::size(16)-little, #{opcode}, #{command_params(args)}>>"
     quoted_command = Code.string_to_quoted!(command)
 
     quote do

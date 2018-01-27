@@ -1,4 +1,16 @@
 defmodule MartyWeb.WalkCommand do
+  @moduledoc """
+  Turns the directions received from the UI into the correct
+  command and arguments to call on the module `Marty`.
+
+  eg
+  iex> MartyWeb.WalkCommand.to_walk_command("forward", "fast", 3)
+  {:walk, [3, 0, 1500, 50, 4]}
+
+  iex> MartyWeb.WalkCommand.to_walk_command("side-right", "medium", "5")
+  {:side_step, [1, 5, 2000, 75]}
+  """
+
   def to_walk_command(direction, speed, steps) when is_binary(steps) do
     case Integer.parse(steps) do
       {i, ""} -> to_walk_command(direction, speed, i)

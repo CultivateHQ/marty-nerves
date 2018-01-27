@@ -1,4 +1,8 @@
 defmodule MartyWeb.MartyChannel do
+  @moduledoc """
+  Control channel.
+  """
+
   use MartyWeb, :channel
 
   alias MartyWeb.WalkCommand

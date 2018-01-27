@@ -1,4 +1,8 @@
 defmodule Camera.PicamSettings do
+  @moduledoc """
+  Sets up camera defaults. Currently just the size.
+  """
+
   use GenServer
 
   @name __MODULE__
@@ -13,7 +17,7 @@ defmodule Camera.PicamSettings do
   end
 
   def handle_info(:set, s) do
-    Picam.set_size(644, 484)
+    Picam.set_size(322, 242)
     {:noreply, s}
   end
 end

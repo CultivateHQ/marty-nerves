@@ -1,4 +1,10 @@
 defmodule NetTransport.GenUdp do
+  @moduledoc """
+  Enables `:gen_udp` to be replaced in tests.
+
+  Call `gen_udp/0` to return the appropriate implementation for your environment.
+  """
+
   def gen_udp do
     Application.get_env(:marty, :gen_udp_impl, :gen_udp)
   end

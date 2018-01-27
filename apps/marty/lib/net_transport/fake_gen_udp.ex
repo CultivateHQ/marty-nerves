@@ -1,4 +1,10 @@
 defmodule NetTransport.FakeGenUdp do
+  @moduledoc """
+  Use in place of `:gen_udp` in tests. Behaves like a spy.
+
+  See `NetTransport.GenUdp`
+  """
+
   use GenServer
   @behaviour NetTransport.GenUdp
 
@@ -20,10 +26,6 @@ defmodule NetTransport.FakeGenUdp do
 
   def log(sock) do
     GenServer.call(sock, :log)
-  end
-
-  def clear_log(sock) do
-    GenServer.cast(sock, :clear_log)
   end
 
   def recv_this_next(sock, {address, port, packet}) do

@@ -1,5 +1,6 @@
 defmodule MartyWeb.WalkCommandTest do
   use ExUnit.Case
+  doctest MartyWeb.WalkCommand
 
   import MartyWeb.WalkCommand
 

@@ -1,10 +1,35 @@
 defmodule Marty.Queries do
+  @moduledoc """
+  Encodes Query commands from http://docs.robotical.io/hardware/esp-socket-api/ and deals
+  with decoding the results.
+  """
+
   def battery do
     <<0x01, 0x01, 0x00>>
   end
 
   def get_chatter do
     <<0x01, 0x05, 0x00>>
+  end
+
+  def accelerometer(axis) when axis in [:x, :y, :z] do
+    axis_code =
+      case axis do
+        :x -> 0x00
+        :y -> 0x01
+        :z -> 0x02
+      end
+
+    <<0x01, 0x02, axis_code>>
+  end
+
+  @doc """
+  Most queries result in a little-endian 32-bit float value being sent
+  back. This decodes the list of bytes received into the float value.
+  """
+  def decode_result([a, b, c, d]) do
+    <<res::float-little-size(32)>> = <<a, b, c, d>>
+    res
   end
 
   def read_chatter(chatter) when length(chatter) < 5 do
@@ -29,21 +54,5 @@ defmodule Marty.Queries do
     else
       :not_chatter
     end
-  end
-
-  def accelerometer(axis) when axis in [:x, :y, :z] do
-    axis_code =
-      case axis do
-        :x -> 0x00
-        :y -> 0x01
-        :z -> 0x02
-      end
-
-    <<0x01, 0x02, axis_code>>
-  end
-
-  def decode_result([a, b, c, d]) do
-    <<res::float-little-size(32)>> = <<a, b, c, d>>
-    res
   end
 end

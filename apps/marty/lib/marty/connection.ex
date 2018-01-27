@@ -1,4 +1,8 @@
 defmodule Marty.Connection do
+  @moduledoc """
+  Deals with connecting to Marty over TCP socket 24.
+  """
+
   use GenServer
   alias Marty.{Commands, Queries, State, Discover}
   require Logger

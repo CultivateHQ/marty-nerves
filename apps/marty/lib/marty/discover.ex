@@ -1,4 +1,15 @@
 defmodule Marty.Discover do
+  @moduledoc """
+  Uses UDP multicast to discover Marty on the local network.
+
+  When discovered this is broadcast to subscribers. eg let's say Marty is on
+  10.0.0.49 and is called "Marty" then subscribers would receive  the message:
+  ```
+  {:marty_discover, {{10, 0, 0, 49}, "Marty"}}
+  ```
+
+  """
+
   use GenServer
   require Logger
 

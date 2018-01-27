@@ -1,4 +1,9 @@
 defmodule NetTransport.FakeGenTcp do
+  @moduledoc """
+  Thin implementation of `FakeGenTcp` to be used in tests
+  or whenever Marty is not around and you want to mess with dev.
+  """
+
   use GenServer
   @behaviour NetTransport.GenTcp
 

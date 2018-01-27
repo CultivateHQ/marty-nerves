@@ -1,4 +1,10 @@
 defmodule Marty.ReadState do
+  @moduledoc """
+  Polls Marty for information, currently just the chatter channel and battery level.
+
+  Updates battery in `Marty.State`. `Marty.Connection` is responsible for sending out chat
+  updates.
+  """
   use GenServer
 
   alias Marty.{Queries, Connection, State}
