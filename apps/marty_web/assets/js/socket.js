@@ -23,13 +23,18 @@ document.getElementById("hello").addEventListener("click", e => {
 })
 
 document.getElementById("celebrate").addEventListener("click", e => {
-  channel.push("celebrate", {duration: speedSelect.value})
+  channel.push("celebrate", {speed: speedSelect.value})
 })
 
 let kick  = foot => {
   let kickSpeed = kickSpeedSelect.value
   let kickTwist = kickTwistSelect.value
   channel.push("kick", {foot: foot, speed: kickSpeed, twist: kickTwist})
+}
+
+let circleDance = side => {
+  let speed = speedSelect.value
+  channel.push("circle_dance", {side: side, speed: speed})
 }
 
 document.getElementById("kick-left").addEventListener("click", e => {
@@ -39,6 +44,24 @@ document.getElementById("kick-left").addEventListener("click", e => {
 document.getElementById("kick-right").addEventListener("click", e => {
   kick("right")
 })
+
+document.getElementById("tap-left").addEventListener("click", e => {
+  channel.push("tap_foot", {foot: "left"})
+})
+
+document.getElementById("tap-right").addEventListener("click", e => {
+  channel.push("tap_foot", {foot: "right"})
+})
+
+document.getElementById("circle-left").addEventListener("click", e => {
+  circleDance("left")
+})
+
+document.getElementById("circle-right").addEventListener("click", e => {
+  circleDance("right")
+})
+
+
 
 const directions = ["forward-left", "forward", "forward-right",
                     "side-left", "side-right",

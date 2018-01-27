@@ -5,9 +5,7 @@ defmodule MartyWeb.MartyChannel do
 
   use MartyWeb, :channel
 
-  alias MartyWeb.{WalkCommand, KickCommand}
-
-  @marty Application.get_env(:marty_channel, :marty, Marty)
+  alias MartyWeb.{WalkCommand, KickCommand, FunCommands}
 
   def join("marty", _payload, socket) do
     Marty.State.subscribe()
@@ -15,37 +13,45 @@ defmodule MartyWeb.MartyChannel do
   end
 
   def handle_in("hello", _, socket) do
-    @marty.hello(true)
+    Marty.hello(true)
     {:reply, :ok, socket}
   end
 
   def handle_in("stop", _, socket) do
-    @marty.stop(3)
+    Marty.stop(3)
     {:reply, :ok, socket}
   end
 
-  def handle_in("celebrate", %{"duration" => duration}, socket) do
-    celebration_time =
-      case duration do
-        "quick" -> 1_000
-        "slow" -> 15_000
-        _ -> 5_000
-      end
+  def handle_in("celebrate", %{"speed" => speed}, socket) do
+    speed
+    |> FunCommands.to_celebrate()
+    |> do_marty_command(socket)
 
-    @marty.celebrate(celebration_time)
     {:reply, :ok, socket}
   end
 
   def handle_in("walk", %{"direction" => direction, "speed" => speed, "steps" => steps}, socket) do
-    {f, a} = WalkCommand.to_walk_command(direction, speed, steps)
-    apply(@marty, f, a)
-    {:reply, :ok, socket}
+    direction
+    |> WalkCommand.to_walk_command(speed, steps)
+    |> do_marty_command(socket)
   end
 
   def handle_in("kick", %{"foot" => foot, "speed" => speed, "twist" => twist}, socket) do
-    {f, a} = KickCommand.to_kick(foot, twist, speed)
-    apply(@marty, f, a)
-    {:reply, :ok, socket}
+    foot
+    |> KickCommand.to_kick(twist, speed)
+    |> do_marty_command(socket)
+  end
+
+  def handle_in("tap_foot", %{"foot" => foot}, socket) do
+    foot
+    |> FunCommands.to_tap_foot()
+    |> do_marty_command(socket)
+  end
+
+  def handle_in("circle_dance", %{"side" => side, "speed" => speed}, socket) do
+    side
+    |> FunCommands.to_circle_dance(speed)
+    |> do_marty_command(socket)
   end
 
   def handle_info({:marty_state, marty_state}, socket) do
@@ -56,5 +62,10 @@ defmodule MartyWeb.MartyChannel do
   def handle_info({:marty_chat, msg}, socket) do
     push(socket, "marty_chat", %{msg: msg})
     {:noreply, socket}
+  end
+
+  defp do_marty_command({f, a}, socket) do
+    apply(Marty, f, a)
+    {:reply, :ok, socket}
   end
 end
