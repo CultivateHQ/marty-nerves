@@ -4,7 +4,7 @@ defmodule Camera.Cam do
   """
 
   @callback next_frame() :: [byte]
-  @callback start_link() :: pid
+  @callback start_link() :: {:ok, pid} | :ignore | {:error, any()}
 
   def impl do
     Application.get_env(:camera, __MODULE__)

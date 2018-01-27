@@ -74,14 +74,16 @@ defmodule Distribution.MulticastConnectNodes do
   def handle_info(_, s), do: {:noreply, s}
 
   defp node_connect(incoming_node) do
-    unless incoming_node == Node.self() do
-      case Node.connect(incoming_node) do
-        true ->
-          Logger.info(fn -> "Yay! Connected to #{incoming_node}" end)
+    unless incoming_node == Node.self(), do: do_node_connect(incoming_node)
+  end
 
-        meh ->
-          Logger.info(fn -> "Spurious request: #{incoming_node} - #{inspect(meh)}" end)
-      end
+  defp do_node_connect(incoming_node) do
+    case Node.connect(incoming_node) do
+      true ->
+        Logger.info(fn -> "Yay! Connected to #{incoming_node}" end)
+
+      meh ->
+        Logger.info(fn -> "Spurious request: #{incoming_node} - #{inspect(meh)}" end)
     end
   end
 end
