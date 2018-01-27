@@ -52,12 +52,12 @@ defmodule Marty.Discover do
   defp poll(sock) do
     gen_udp().send(sock, @ip, @port, "AA")
 
-    case gen_udp().recv(sock, 0, 1_000) do
+    case gen_udp().recv(sock, 0, 5_000) do
       {:ok, {marty_ip, _, marty_name}} ->
         Events.broadcast(:marty_discover, {:marty_discover, {marty_ip, marty_name}})
 
-      {:error, _reason} ->
-        nil
+      err = {:error, _reason} ->
+        Logger.debug(fn -> "Nope, no marty. #{inspect(err)}" end)
     end
   end
 end

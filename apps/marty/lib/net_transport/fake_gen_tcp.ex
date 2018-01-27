@@ -36,6 +36,7 @@ defmodule NetTransport.FakeGenTcp do
   end
 
   def connection_socket do
+    send(Marty.Connection, {:marty_discover, {{1, 2, 3, 4}, "Marty"}})
     %{sock: sock} = :sys.get_state(Marty.Connection)
     sock
   end

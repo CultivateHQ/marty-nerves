@@ -39,8 +39,9 @@ defmodule Marty.Connection do
     case connect(marty_ip) do
       {:ok, sock} ->
         State.connected()
-        Logger.info (fn -> "Connected to #{marty_name} on #{inspect(marty_ip)}" end)
+        Logger.info(fn -> "Connected to #{marty_name} on #{inspect(marty_ip)}" end)
         {:noreply, %{s | sock: sock, marty_ip: marty_ip}}
+
       err ->
         State.disconnected()
 
@@ -94,8 +95,8 @@ defmodule Marty.Connection do
         {:reply, {:ok, Queries.decode_result(res)}, s}
     after
       @query_timeout ->
-        disconnect(sock)
-        {:reply, {:error, :timeout}, %{s | sock: nil}}
+        new_s = disconnect(s)
+        {:reply, {:error, :timeout}, new_s}
     end
   end
 
@@ -108,9 +109,25 @@ defmodule Marty.Connection do
     {:noreply, s}
   end
 
-  defp disconnect(sock) do
+  defp disconnect(s = %{sock: sock}) do
+    Logger.info(fn -> "Disconnected from Marty" end)
     State.disconnected()
     gen_tcp().close(sock)
+    try_reconnect(s)
+  end
+
+  defp try_reconnect(s = %{marty_ip: nil}) do
+    %{s | sock: nil}
+  end
+
+  defp try_reconnect(s = %{marty_ip: ip}) do
+    case connect(ip) do
+      {:ok, sock} ->
+        Logger.info(fn -> "Managed to reconnect. Phew!" end)
+        State.connected()
+        %{s | sock: sock}
+      _ -> %{s | sock: nil}
+    end
   end
 
   defp connect(ip) do

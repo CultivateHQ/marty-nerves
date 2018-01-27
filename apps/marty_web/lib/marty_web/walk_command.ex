@@ -11,7 +11,7 @@ defmodule MartyWeb.WalkCommand do
   end
 
   defp do_to_walk_command(["side", direction], speed, steps) do
-    {:side_step, [side_direction(direction), steps, duration(speed, steps), 100]}
+    {:side_step, [side_direction(direction), steps, duration(speed, steps), 75]}
   end
 
   defp do_to_walk_command(direction, speed, steps) do
@@ -34,11 +34,11 @@ defmodule MartyWeb.WalkCommand do
   defp duration(speed, steps) when steps < 3, do: round(do_duration(speed) * 1.5)
   defp duration(speed, _), do: do_duration(speed)
 
-  defp do_duration("fast"), do: 2_000
-  defp do_duration("medium"), do: 3_000
-  defp do_duration("slow"), do: 4_500
+  defp do_duration("fast"), do: 1_500
+  defp do_duration("medium"), do: 2_000
+  defp do_duration("slow"), do: 3_500
 
-  defp stride(["back", _]), do: -100
-  defp stride(["back"]), do: -100
-  defp stride(_), do: 100
+  defp stride(["back", _]), do: -50
+  defp stride(["back"]), do: -50
+  defp stride(_), do: 50
 end

@@ -14,7 +14,7 @@ defmodule MartyWeb.MartyChannelTest do
   end
 
   setup do
-    fake_tcp = FakeGenTcp.connection_socket()
+    assert fake_tcp = FakeGenTcp.connection_socket()
     FakeGenTcp.clear_log(fake_tcp)
     {:ok, fake_tcp: fake_tcp}
   end
@@ -34,6 +34,6 @@ defmodule MartyWeb.MartyChannelTest do
   test "walk", %{socket: socket, fake_tcp: fake_tcp} do
     ref = push socket, "walk", %{direction: "forward", speed: "medium", "steps": 3}
     assert_reply ref, :ok
-    assert FakeGenTcp.log(fake_tcp) == [Commands.walk(3, 0, 3_000, 100, 4)]
+    assert FakeGenTcp.log(fake_tcp) == [Commands.walk(3, 0, 2_000, 50, 4)]
   end
 end

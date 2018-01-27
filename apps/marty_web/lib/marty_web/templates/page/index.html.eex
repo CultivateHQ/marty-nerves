@@ -25,7 +25,7 @@
       <option value="fast">Fast</option>
     </select>
     <select id="steps">
-      <%= for steps <- [1, 2, 3, 5, 8] do %>
+      <%= for steps <- [1, 2, 3, 5, 8, 13, 21, 44, 65, 109] do %>
         <%
         selected = if steps == 3 do
         "selected"

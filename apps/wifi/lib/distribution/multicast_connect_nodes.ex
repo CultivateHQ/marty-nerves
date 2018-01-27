@@ -32,34 +32,36 @@ defmodule Distribution.MulticastConnectNodes do
   def init(_) do
     udp_options = [
       :binary,
-      active:          10,
-      add_membership:  {@ip, {0, 0, 0, 0}},
-      multicast_if:    {0, 0, 0, 0},
-      multicast_loop:  false,
-      multicast_ttl:   4,
-      reuseaddr:       true
+      active: 10,
+      add_membership: {@ip, {0, 0, 0, 0}},
+      multicast_if: {0, 0, 0, 0},
+      multicast_loop: false,
+      multicast_ttl: 4,
+      reuseaddr: true
     ]
+
     send(self(), :broadcast)
     {:ok, socket} = :gen_udp.open(@port, udp_options)
     {:ok, %__MODULE__{socket: socket}}
   end
 
-
   def handle_info({:udp, socket, _ip, _port, "iamnode:" <> node}, state) do
     # This is very vulnerable to atom table exhaustion attack. Do not use on
     # anything approaching a non-toy sytem.
     incoming_node = String.to_atom(node)
-    unless incoming_node  in Node.list do
+
+    unless incoming_node in Node.list() do
       node_connect(incoming_node)
     end
-    :inet.setopts(socket, [active: 1])
+
+    :inet.setopts(socket, active: 1)
 
     {:noreply, state}
   end
 
   def handle_info(msg = {:udp, socket, _ip, _port, _data}, state) do
-    Logger.debug fn -> "Unexpected incomping udp: #{inspect(msg)}" end
-    :inet.setopts(socket, [active: 1])
+    Logger.debug(fn -> "Unexpected incomping udp: #{inspect(msg)}" end)
+    :inet.setopts(socket, active: 1)
     {:noreply, state}
   end
 
@@ -75,9 +77,10 @@ defmodule Distribution.MulticastConnectNodes do
     unless incoming_node == Node.self() do
       case Node.connect(incoming_node) do
         true ->
-          Logger.info fn ->"Yay! Connected to #{incoming_node}" end
+          Logger.info(fn -> "Yay! Connected to #{incoming_node}" end)
+
         meh ->
-          Logger.info fn -> "Spurious request: #{incoming_node} - #{inspect(meh)}" end
+          Logger.info(fn -> "Spurious request: #{incoming_node} - #{inspect(meh)}" end)
       end
     end
   end
