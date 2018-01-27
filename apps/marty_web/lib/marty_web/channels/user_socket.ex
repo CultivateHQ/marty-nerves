@@ -2,12 +2,12 @@ defmodule MartyWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "marty", MartyWeb.MartyChannel
+  channel("marty", MartyWeb.MartyChannel)
 
- # channel "room:*", MartyWeb.RoomChannel
+  # channel "room:*", MartyWeb.RoomChannel
 
   ## Transports
-  transport :websocket, Phoenix.Transports.WebSocket
+  transport(:websocket, Phoenix.Transports.WebSocket)
   # transport :longpoll, Phoenix.Transports.LongPoll
 
   # Socket params are passed from the client and can

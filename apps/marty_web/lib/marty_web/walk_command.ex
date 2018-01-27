@@ -1,11 +1,11 @@
 defmodule MartyWeb.WalkCommand do
-
-  def to_walk_command(direction, speed, steps) when is_binary(steps)do
+  def to_walk_command(direction, speed, steps) when is_binary(steps) do
     case Integer.parse(steps) do
       {i, ""} -> to_walk_command(direction, speed, i)
       _ -> {:error, :invalid_steps}
     end
   end
+
   def to_walk_command(direction, speed, steps) do
     do_to_walk_command(String.split(direction, "-"), speed, steps)
   end
@@ -15,11 +15,7 @@ defmodule MartyWeb.WalkCommand do
   end
 
   defp do_to_walk_command(direction, speed, steps) do
-    {:walk, [steps,
-             turn(direction),
-             duration(speed, steps),
-             stride(direction),
-             4]}
+    {:walk, [steps, turn(direction), duration(speed, steps), stride(direction), 4]}
   end
 
   defp turn(["forward", "left"]), do: 100

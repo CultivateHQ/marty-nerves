@@ -9,7 +9,7 @@ defmodule Wifi.NetworkWrapperSupervisor do
 
   def init([]) do
     children = [
-      worker(Wifi.NetworkWrapper, [Wifi.settings_file()]),
+      worker(Wifi.NetworkWrapper, [Wifi.settings_file()])
     ]
 
     supervise(children, strategy: :one_for_one)

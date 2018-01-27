@@ -8,7 +8,7 @@ defmodule Camera.FakeCam do
   @name __MODULE__
 
   defstruct images: nil, undisplayed_images: nil
-  @type t :: %__MODULE__{images: list(String.t), undisplayed_images: list(String.t)}
+  @type t :: %__MODULE__{images: list(String.t()), undisplayed_images: list(String.t())}
 
   def start_link do
     GenServer.start_link(__MODULE__, {}, name: @name)

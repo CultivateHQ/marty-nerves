@@ -5,9 +5,10 @@ defmodule Camera.Application do
 
   def start(_type, _args) do
     import Supervisor.Spec
+
     children = [
       worker(Camera.Cam.impl(), []),
-      worker(Camera.PicamSettings, []),
+      worker(Camera.PicamSettings, [])
     ]
 
     opts = [strategy: :one_for_one, name: Camera.Supervisor]

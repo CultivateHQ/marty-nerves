@@ -7,8 +7,9 @@ defmodule ImageServer.Application do
 
   def start(_type, _args) do
     import Supervisor.Spec
+
     children = [
-      {Plug.Adapters.Cowboy, scheme: :http, plug: __MODULE__, options: cowboy_options()},
+      {Plug.Adapters.Cowboy, scheme: :http, plug: __MODULE__, options: cowboy_options()}
     ]
 
     opts = [strategy: :one_for_one, name: ImageServer.Supervisor]
@@ -17,10 +18,10 @@ defmodule ImageServer.Application do
 
   def dispatch_spec do
     [
-      {:_, [
-          {"/", ImageServer.ImagesFromCameraWebsocketHandler, []},
-        ]
-      }
+      {:_,
+       [
+         {"/", ImageServer.ImagesFromCameraWebsocketHandler, []}
+       ]}
     ]
   end
 

@@ -6,7 +6,9 @@ defmodule Network.WifiSetup do
   @doc """
   Set up WiFi on "wlan0" with the optiosn provided. Or at least pretend to do so.
   """
-  @callback setup_wifi(wifi_opts :: [key_mgmt: :"WPA-PSK" | none, ssid: String.t, psk: String.t]) :: {:ok, pid}
+  @callback setup_wifi(
+              wifi_opts :: [key_mgmt: :"WPA-PSK" | none, ssid: String.t(), psk: String.t()]
+            ) :: {:ok, pid}
 
   @doc """
   Actual implementation module to use in this environment

@@ -15,19 +15,18 @@ defmodule Wifi.Settings do
 
   Sho
   """
-  @spec read_settings(String.t) :: list
+  @spec read_settings(String.t()) :: list
   def read_settings(file) do
     with {:ok, binary} <- File.read(file),
          {ssid, secret} <- decode_file_contents(binary) do
       Keyword.merge(default_settings(), ssid: ssid, psk: secret)
-
     else
       {:error, :enoent} ->
         # Not been set - it's fine
         default_settings()
 
       other ->
-        Logger.error "Unexpected problem reading WiFi settings file: #{inspect(other)}"
+        Logger.error("Unexpected problem reading WiFi settings file: #{inspect(other)}")
         default_settings()
     end
   end
@@ -36,9 +35,9 @@ defmodule Wifi.Settings do
   Write the `ssid` and `secret` tuple to the file, which will subsequently override those options
   if the file is passed to `read_settings/1`o
   """
-  @spec set(String.t, {String.t, String.t}) :: :ok | {:error, atom}
+  @spec set(String.t(), {String.t(), String.t()}) :: :ok | {:error, atom}
   def set(file, settings = {_ssid, _secret}) do
-    File.write file, :erlang.term_to_binary(settings)
+    File.write(file, :erlang.term_to_binary(settings))
   end
 
   defp default_settings do

@@ -4,7 +4,7 @@ defmodule Wifi.Application do
   use Application
   import Supervisor.Spec, warn: false
 
-  @mix_env Mix.env
+  @mix_env Mix.env()
 
   def start(_type, _args) do
     opts = [strategy: :one_for_one, name: Wifi.Supervisor]
@@ -21,12 +21,13 @@ defmodule Wifi.Application do
   end
 
   defp children(:test), do: []
+
   defp children(_) do
     [
       supervisor(Wifi.NetworkWrapperSupervisor, []),
       worker(Wifi.Ntp, [ntp_servers()]),
       worker(Distribution.DistributeNode, [node_name()]),
-      worker(Distribution.MulticastConnectNodes, []),
+      worker(Distribution.MulticastConnectNodes, [])
     ]
   end
 end

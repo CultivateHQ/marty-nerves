@@ -22,7 +22,7 @@ defmodule Distribution.DistributeNode do
   Start with the `node_name`. On receiving a dhcp ipv4 address it will
   bind to `node_name`@current_ip
   """
-  @spec start_link(String.t) :: {:ok, pid}
+  @spec start_link(String.t()) :: {:ok, pid}
   def start_link(node_name) do
     GenServer.start_link(__MODULE__, node_name, name: @name)
   end
@@ -37,16 +37,16 @@ defmodule Distribution.DistributeNode do
     start_node(node_name, address)
     {:noreply, node_name}
   end
-  def handle_info({Nerves.Udhcpc, _, _}, s),  do: {:noreply, s}
 
+  def handle_info({Nerves.Udhcpc, _, _}, s), do: {:noreply, s}
 
   defp start_node(node_name, address) do
-    Node.stop
-    full_node_name = "#{node_name}@#{address}" |> String.to_atom
+    Node.stop()
+    full_node_name = "#{node_name}@#{address}" |> String.to_atom()
     {:ok, _pid} = Node.start(full_node_name)
   end
 
-  if Mix.env == :prod do
+  if Mix.env() == :prod do
     defp epmd_init do
       {_, 0} = System.cmd("epmd", ["-daemon"])
       :ok

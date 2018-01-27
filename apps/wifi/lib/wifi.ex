@@ -6,8 +6,8 @@ defmodule Wifi do
 
   alias Wifi.{Settings, NetworkWrapperSupervisor, NetworkWrapper}
 
-  @type ssid :: String.t
-  @type secret :: String.t
+  @type ssid :: String.t()
+  @type secret :: String.t()
 
   @doc """
   Override existing `ssid` and `secret`. The current WiFi is terminated and will be replaced with the new settings.
@@ -18,7 +18,7 @@ defmodule Wifi do
   def set(ssid, secret) do
     Settings.set(settings_file(), {ssid, secret})
     Supervisor.terminate_child(NetworkWrapperSupervisor, NetworkWrapper)
-    {:ok, _pid} =  Supervisor.restart_child(NetworkWrapperSupervisor, NetworkWrapper)
+    {:ok, _pid} = Supervisor.restart_child(NetworkWrapperSupervisor, NetworkWrapper)
     :ok
   end
 
@@ -29,7 +29,7 @@ defmodule Wifi do
   @doc """
   The path to the settings file
   """
-  @spec settings_file() :: String.t
+  @spec settings_file() :: String.t()
   def settings_file() do
     Application.fetch_env!(:wifi, :settings_file)
   end

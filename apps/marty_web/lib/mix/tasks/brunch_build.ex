@@ -27,6 +27,8 @@ defmodule Mix.Tasks.BrunchBuild do
   @shortdoc "Runs the brunch build in production mode"
 
   def run(_args) do
-    Mix.Shell.cmd("cd assets && brunch build --production", [], fn x -> Logger.info inspect({:brunch_build, x}) end)
+    Mix.Shell.cmd("cd assets && brunch build --production", [], fn x ->
+      Logger.info(inspect({:brunch_build, x}))
+    end)
   end
 end

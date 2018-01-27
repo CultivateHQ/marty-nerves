@@ -29,7 +29,7 @@ defmodule Marty.CommandDefinitions do
     {:circle_dance, 0x1C, [{:side, :uint8}, {:move_time, :uint16}]},
     {:lifelike_behaviours, 0x1D, [{:force, :boolean}]},
     {:enable_safeties, 0x1E, []},
-    {:get_firmware_version, 0x20, []},
+    {:get_firmware_version, 0x20, []}
   ]
 
   defmacro __using__(which) when is_atom(which) do

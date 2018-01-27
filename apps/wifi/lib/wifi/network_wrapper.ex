@@ -21,7 +21,7 @@ defmodule Wifi.NetworkWrapper do
   @doc """
   The settings file is the one used to store any changed SSID and secret settings.
   """
-  @spec start_link(String.t) :: {:ok, pid}
+  @spec start_link(String.t()) :: {:ok, pid}
   def start_link(settings_file) do
     GenServer.start_link(__MODULE__, settings_file, name: @name)
   end

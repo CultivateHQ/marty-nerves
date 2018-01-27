@@ -126,7 +126,9 @@ defmodule Marty.Connection do
         Logger.info(fn -> "Managed to reconnect. Phew!" end)
         State.connected()
         %{s | sock: sock}
-      _ -> %{s | sock: nil}
+
+      _ ->
+        %{s | sock: nil}
     end
   end
 

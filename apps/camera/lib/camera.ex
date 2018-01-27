@@ -6,5 +6,4 @@ defmodule Camera do
   alias Camera.Cam
 
   def next_frame(), do: Cam.impl().next_frame()
-
 end

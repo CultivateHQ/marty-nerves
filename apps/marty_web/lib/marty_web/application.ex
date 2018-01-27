@@ -7,7 +7,7 @@ defmodule MartyWeb.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
-      supervisor(MartyWeb.Endpoint, []),
+      supervisor(MartyWeb.Endpoint, [])
       # Start your own worker by calling: MartyWeb.Worker.start_link(arg1, arg2, arg3)
       # worker(MartyWeb.Worker, [arg1, arg2, arg3]),
     ]
