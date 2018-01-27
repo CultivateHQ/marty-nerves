@@ -8,12 +8,12 @@ Applications:
 * `wifi` - gets us on the WiFi network
 * `marty` - sends commands to Marty.
 * `marty_web` - Phoenix application for controlling Marty.
+* `camera` - controls a Picam
+* `image_server` - serves images from the Picam over websockets to the control
 
 
 ## Todo / Ideas
 
-* Stop hard-coding Marty's IP. Maybe use the Multicast to get Marty's IP
-* Add a camera, displaying in Marty Web
-* More controls
-* Move sideways as well as try and turn
-* Use MDNS so we know the control IP.j 0k
+* Use MDNS so we know the control IP.
+* More controls (kick)
+* Better designed controls
