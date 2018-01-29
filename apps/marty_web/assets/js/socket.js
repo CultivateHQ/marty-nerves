@@ -61,6 +61,14 @@ document.getElementById("circle-right").addEventListener("click", e => {
   circleDance("right")
 })
 
+document.getElementById("lifelike-on").addEventListener("click", e => {
+  channel.push("lifelike", {enable: true})
+})
+
+document.getElementById("lifelike-off").addEventListener("click", e => {
+  channel.push("lifelike", {enable: false})
+})
+
 
 
 const directions = ["forward-left", "forward", "forward-right",

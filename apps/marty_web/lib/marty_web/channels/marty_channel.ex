@@ -54,6 +54,11 @@ defmodule MartyWeb.MartyChannel do
     |> do_marty_command(socket)
   end
 
+  def handle_in("lifelike", %{"enable" => enable}, socket) when is_boolean(enable) do
+    Marty.lifelike_behaviours(enable)
+    {:reply, :ok, socket}
+  end
+
   def handle_info({:marty_state, marty_state}, socket) do
     push(socket, "marty_state", marty_state)
     {:noreply, socket}
@@ -63,6 +68,7 @@ defmodule MartyWeb.MartyChannel do
     push(socket, "marty_chat", %{msg: msg})
     {:noreply, socket}
   end
+
 
   defp do_marty_command({f, a}, socket) do
     apply(Marty, f, a)

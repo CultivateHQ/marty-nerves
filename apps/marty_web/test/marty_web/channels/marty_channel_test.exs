@@ -60,4 +60,16 @@ defmodule MartyWeb.MartyChannelTest do
     assert_reply(ref, :ok)
     assert FakeGenTcp.log(fake_tcp) == [Commands.circle_dance(0, 1_500)]
   end
+
+  test "lifelike behaviours on", %{socket: socket, fake_tcp: fake_tcp} do
+    ref = push(socket, "lifelike", %{"enable" => true})
+    assert_reply(ref, :ok)
+    assert FakeGenTcp.log(fake_tcp) == [Commands.lifelike_behaviours(true)]
+  end
+
+  test "lifelike behaviours off", %{socket: socket, fake_tcp: fake_tcp} do
+    ref = push(socket, "lifelike", %{"enable" => false})
+    assert_reply(ref, :ok)
+    assert FakeGenTcp.log(fake_tcp) == [Commands.lifelike_behaviours(false)]
+  end
 end

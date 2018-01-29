@@ -6,7 +6,7 @@
 
 # -name fw@0.0.0.0
 # -setcookie 2f1N1f/njnmXGYBiw+5Cb+yI/UJe465ktr4rfuZQ27gJH5UFPu+INcoI+gbac94N
--setcookie marty
+-setcookie cultivate
 
 ## Use Ctrl-C to interrupt the current shell rather than invoking the emulator's
 ## break handler and possibly exiting the VM.

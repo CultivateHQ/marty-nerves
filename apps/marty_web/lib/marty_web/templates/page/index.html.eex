@@ -34,15 +34,14 @@
           <td>
             <select id="kick-twist">
               <%= for kick_twist <- -10..10 do %>
-                <%
-                selected = if kick_twist == 0 do
+                <% selected = if kick_twist == 0 do
                 "selected"
                 else
                 ""
                 end %>
 
                 <option value="<%= kick_twist * 10 %>" <%= selected %>>Twist <%= kick_twist * 10 %></option>
-              <%= end %>
+              <% end %>
             </select>
           </td>
           <td>
@@ -72,16 +71,8 @@
         <option value="fast">Fast</option>
       </select>
       <select id="steps">
-        <%= for steps <- [1, 2, 3, 5, 8, 13, 21, 44, 65, 109] do %>
-          <%
-          selected = if steps == 3 do
-          "selected"
-          else
-          ""
-          end
-          %>
-
-          <option value="<%= steps %>" <%= selected %>><%= steps %> step</option>
+        <%= for {steps, description, selected} <- steps_select() do %>
+          <option value="<%= steps %>" <%= selected %>><%= description %></option>
         <% end %>
       </select>
     </p>
@@ -94,8 +85,13 @@
       <button id="tap-left">Tap left</button>
       <button id="tap-right">Tap right</button>
     </p>
+    <p>
       <button id="circle-left">Circle left</button>
       <button id="circle-right">Circle right</button>
+    </p>
+    <p>
+      <button id="lifelike-on">Lifelike</button>
+      <button id="lifelike-off">Play dead</button>
     </p>
     <hr/>
     <p id="connected">Disconnected</p>

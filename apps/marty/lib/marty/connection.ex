@@ -50,7 +50,7 @@ defmodule Marty.Connection do
         State.disconnected()
 
         Logger.warn(fn ->
-          "Failed to connect to #{marty_name} on %{inspect(marty_ip)}: #{inspect(err)}"
+          "Failed to connect to #{marty_name} on #{inspect(marty_ip)}: #{inspect(err)}"
         end)
 
         {:noreply, %{s | sock: nil, marty_name: nil}}
@@ -140,7 +140,6 @@ defmodule Marty.Connection do
     case gen_tcp().connect(ip, @marty_port, @connect_timeout) do
       {:ok, sock} ->
         gen_tcp().tcp_send(sock, Commands.enable_safeties())
-        gen_tcp().tcp_send(sock, Commands.lifelike_behaviours(true))
         {:ok, sock}
 
       err ->
