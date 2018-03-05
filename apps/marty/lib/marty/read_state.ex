@@ -11,8 +11,12 @@ defmodule Marty.ReadState do
 
   @name __MODULE__
   @read_battery_interval 10_000
-  @poll_for_chatter_interval 5_000
+  @poll_for_chatter_interval 5_500
+  @read_touch_sensor_interval 450
   @read_battery Queries.battery()
+
+  @left_sensor 1
+  @right_sensor 0
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, {}, name: @name)
@@ -21,6 +25,7 @@ defmodule Marty.ReadState do
   def init(_) do
     send(self(), :read_battery)
     send(self(), :poll_for_chatter)
+    send(self(), :read_touch_sensors)
     {:ok, %{}}
   end
 
@@ -34,6 +39,27 @@ defmodule Marty.ReadState do
     Connection.poll_for_chatter()
     Process.send_after(self(), :poll_for_chatter, @poll_for_chatter_interval)
     {:noreply, s}
+  end
+
+  def handle_info(:read_touch_sensors, s) do
+    with {:ok, left} <- read_touch_sensor(@left_sensor),
+         {:ok, right} <- read_touch_sensor(@right_sensor) do
+      State.update_touch_sensors(
+        Queries.interpret_gpio_pin_on_off(left),
+        Queries.interpret_gpio_pin_on_off(right)
+      )
+    else
+      _ -> nil
+    end
+
+    Process.send_after(self(), :read_touch_sensors, @read_touch_sensor_interval)
+    {:noreply, s}
+  end
+
+  defp read_touch_sensor(pin) do
+    pin
+    |> Queries.read_gpio_pin()
+    |> Connection.send_query()
   end
 
   defp read_battery() do

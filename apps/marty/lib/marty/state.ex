@@ -9,8 +9,13 @@ defmodule Marty.State do
 
   @name __MODULE__
 
-  defstruct connected?: false, battery: nil
-  @type t :: %__MODULE__{connected?: boolean, battery: float}
+  defstruct connected?: false, battery: nil, touch_sensors: %{left: false, right: false}
+
+  @type t :: %__MODULE__{
+          connected?: boolean,
+          battery: float,
+          touch_sensors: map()
+        }
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, {}, name: @name)
@@ -30,6 +35,10 @@ defmodule Marty.State do
 
   def update_battery(level) do
     GenServer.cast(@name, {:update_battery, level})
+  end
+
+  def update_touch_sensors(left, right) do
+    GenServer.cast(@name, {:update_touch_sensors, %{left: left, right: right}})
   end
 
   def chat_message_received(msg) do
@@ -65,6 +74,16 @@ defmodule Marty.State do
 
   def handle_cast({:chat_message_received, msg}, s) do
     Events.broadcast(:marty_state, {:marty_chat, msg})
+    {:noreply, s}
+  end
+
+  def handle_cast({:update_touch_sensors, new_sensor_state}, s = %{touch_sensors: sensor_state})
+      when new_sensor_state != sensor_state do
+    state_changed()
+    {:noreply, %{s | touch_sensors: new_sensor_state}}
+  end
+
+  def handle_cast({:update_touch_sensors, _}, s) do
     {:noreply, s}
   end
 

@@ -3,6 +3,7 @@ defmodule Marty.StateTest do
   alias Marty.State
 
   setup do
+    State.update_touch_sensors(false, false)
     State.subscribe()
     :ok
   end
@@ -34,6 +35,20 @@ defmodule Marty.StateTest do
     State.chat_message_received("hello")
     :sys.get_state(State)
     assert_receive({:marty_chat, "hello"})
+  end
+
+  test "update foot sensor" do
+    State.update_touch_sensors(true, false)
+    :sys.get_state(State)
+    assert_receive({:marty_state, %{touch_sensors: %{left: true, right: false}}})
+
+    State.update_touch_sensors(true, true)
+    :sys.get_state(State)
+    assert_receive({:marty_state, %{touch_sensors: %{left: true, right: true}}})
+
+    State.update_touch_sensors(true, true)
+    :sys.get_state(State)
+    refute_receive({:marty_state, %{}})
   end
 
   defp connect_and_flush_notifications do

@@ -31,4 +31,16 @@ defmodule Marty.QueriesTest do
     assert :not_chatter == Queries.read_chatter([34, 35, 36, 37] ++ 'hello' ++ [1])
     assert :not_chatter == Queries.read_chatter([34, 35, 36, 37] ++ 'hell' ++ [1, 0])
   end
+
+  test "read_gpio_pin" do
+    assert <<1, 4, 0>> == Queries.read_gpio_pin(0)
+    assert <<1, 4, 3>> == Queries.read_gpio_pin(3)
+  end
+
+  test "interpret gpio pin on/off values" do
+    assert Queries.interpret_gpio_pin_on_off(0.0) == false
+    assert Queries.interpret_gpio_pin_on_off(0.1) == false
+    assert Queries.interpret_gpio_pin_on_off(0.9) == true
+    assert Queries.interpret_gpio_pin_on_off(1.0) == true
+  end
 end

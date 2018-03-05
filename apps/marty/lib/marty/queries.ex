@@ -23,6 +23,22 @@ defmodule Marty.Queries do
     <<0x01, 0x02, axis_code>>
   end
 
+  def read_gpio_pin(pin) do
+    <<0x01, 0x04, pin>>
+  end
+
+  @doc """
+  When reading values from the bump sensors they seem to come back as 1.0 or 0.0,
+  but let's make it a bit smoother
+  """
+  def interpret_gpio_pin_on_off(value) do
+    if value < 0.5 do
+      false
+    else
+      true
+    end
+  end
+
   @doc """
   Most queries result in a little-endian 32-bit float value being sent
   back. This decodes the list of bytes received into the float value.

@@ -94,6 +94,34 @@ document.getElementById("move-stop").addEventListener("click", e => {
 let connectedElement = document.getElementById("connected")
 let batteryElement = document.getElementById("battery")
 let chatElement = document.getElementById("chat")
+let leftBumpElement = document.getElementById("left-bump")
+let rightBumpElement = document.getElementById("right-bump")
+
+let bumpText = (side, bumped) => {
+  if (bumped) {
+    return `${side} bump`
+  } else {
+    return `${side} nope`
+  }
+}
+
+let bumpClass = (el, bumped) => {
+  if (bumped) {
+    el.classList.add("bumped")
+  } else {
+    el.classList.remove("bumped")
+  }
+}
+
+let bumpLeft = bumped => {
+  leftBumpElement.innerHTML = bumpText("Left", bumped)
+  bumpClass(leftBumpElement, bumped)
+}
+
+let bumpRight = bumped => {
+  rightBumpElement.innerHTML = bumpText("Right", bumped)
+  bumpClass(rightBumpElement, bumped)
+}
 
 let connectedState = martyState => {
   connectedElement.innerHTML = "Connected"
@@ -106,6 +134,8 @@ let disconnectedState = () => {
   connectedElement.innerHTML = "Disconnected"
   batteryElement.innerHTML = "?"
   chatElement.innerHTML = ""
+  bumpLeft(false)
+  bumpRight(false)
 }
 
 channel.on("marty_state", martyState => {
@@ -114,6 +144,8 @@ channel.on("marty_state", martyState => {
   }  else {
     disconnectedState()
   }
+  bumpLeft(martyState.touch_sensors.left)
+  bumpRight(martyState.touch_sensors.right)
 })
 
 channel.on("marty_chat", chat => {

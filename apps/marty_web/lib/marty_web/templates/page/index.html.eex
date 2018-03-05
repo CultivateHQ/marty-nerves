@@ -94,6 +94,15 @@
       <button id="lifelike-off">Play dead</button>
     </p>
     <hr/>
+    <div class="bump-sensors">
+      <div id="left-bump" class="bump-sensor-state">
+        Left nope
+      </div>
+      <div id="right-bump" class="bump-sensor-state">
+        Right nope
+      </div>
+    </div>
+    <hr/>
     <p id="connected">Disconnected</p>
     <p id="battery"></p>
     <hr/>

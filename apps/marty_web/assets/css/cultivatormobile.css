@@ -123,3 +123,18 @@ button.direction:active {
   margin: 20px auto;
   display: table;
 }
+
+.bump-sensors{
+  display: block;
+  height: 2.5em;
+}
+.bump-sensor-state {
+  display: inline-block;
+  margin: 0.2em 0;
+  padding: 0.25em 0.2em;
+  width: 5.5em;
+}
+
+.bump-sensor-state.bumped {
+  border: 1px red solid;
+}
