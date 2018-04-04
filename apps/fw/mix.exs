@@ -6,6 +6,8 @@ defmodule Fw.MixProject do
              _ -> "host"
            end)
 
+  System.put_env("MIX_TARGET", @target)
+
   Mix.shell().info([
     :green,
     """
