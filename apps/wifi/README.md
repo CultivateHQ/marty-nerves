@@ -13,12 +13,17 @@ The GenServer [WiFi.NetworkWrapper](lib/wifi/network_wrapper.ex) starts the WiFi
 
 Having to create a new firmware image just to change WiFi is (was) a royal pain, so this appliation supports not doing that:
 
-1. Connect to your (presumably) Pi. You can use with a keyboard with monitor but it's often easier to connect with [Screen](https://linux.die.net/man/1/screen) over USB:  connect your PI's USB and `ls /dev/tty*`, wait a few seconds, and connect to the device that just appeared. (It's `/dev/tty.usb[some number]` on my MacBook Pro).
+1. Connect to your (presumably) Pi. You can use with a keyboard with monitor but it's often easier to connect with [Screen](https://linux.die.net/man/1/screen) over USB:  connect your PI's USB and `ls /dev/tty*. Note that one USB input on the Pi Zero is power-only; use the one on the outside to connect. Also many USB cables are for charging only; use one that is known to also support data.
+1. Wait a few seconds, and connect to the device that just appeared. (It's `/dev/tty.usb[some number]` on my MacBook Pro).
 1. `Wifi.set("your ssid", "your secret")`
 
 That's it. See [lib/wifi.ex](lib/wifi.ex) for more details.
 
 Now this may be redundant with System.Registry - but ...
+
+## Knowing Wifi is set
+
+Until Wifi is set, Nerves Networking is super chatty at Log level `info` so that's a clue. The logs scrolling past, when connected over screen (or `picocom`) will tell you what's going on.
 
 
 ## Setting the time
