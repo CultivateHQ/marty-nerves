@@ -14,8 +14,8 @@ The GenServer [WiFi.NetworkWrapper](lib/wifi/network_wrapper.ex) starts the WiFi
 Having to create a new firmware image just to change WiFi is (was) a royal pain, so this appliation supports not doing that:
 
 1. Connect to your (presumably) Pi. You can use with a keyboard with monitor but it's often easier to connect with [Screen](https://linux.die.net/man/1/screen) over USB:  connect your PI's USB and `ls /dev/tty*. Note that one USB input on the Pi Zero is power-only; use the one on the outside to connect. Also many USB cables are for charging only; use one that is known to also support data.
-1. Wait a few seconds, and connect to the device that just appeared. (It's `/dev/tty.usb[some number]` on my MacBook Pro).
-1. `Wifi.set("your ssid", "your secret")`
+1. Wait a few seconds, and connect to the device that just appeared. (It's `/dev/tty.usb[some number]` on my MacBook Pro) like this: `screen /dev/tty.usb<device> 115200`. (for more details see [the Nerves FAQ](https://github.com/nerves-project/nerves/blob/master/docs/FAQ.md))
+1. Once connected you are on an Elixir prompt so you can run `Wifi.set("your ssid", "your secret")`.
 
 That's it. See [lib/wifi.ex](lib/wifi.ex) for more details.
 
