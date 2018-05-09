@@ -1,116 +1,55 @@
-<div class="controller">
-
-  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-
-  <div class="controller__right-controls">
-    <table>
-      <tbody>
-        <tr>
-          <td colspan="3">
-            <h2 class="controller__title">
-              <i class="fa fa-arrows"></i> Movement</h2>
-          </td>
-        </tr>
-        <%= for control_row <- control_row_definitions() do %>
-          <tr>
-            <%= for {dir, entity} <- control_row do %>
-              <td><button class="direction" id="move-<%= dir %>">&<%= entity %>;</button></td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <table>
-      <tbody>
-        <tr>
-          <td colspan="2">
-            <h2 class="controller__title">
-              <i class="fa fa-arrows"></i>Kick
-            </h2>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <select id="kick-twist">
-              <%= for kick_twist <- -10..10 do %>
-                <% selected = if kick_twist == 0 do
-                "selected"
-                else
-                ""
-                end %>
-
-                <option value="<%= kick_twist * 10 %>" <%= selected %>>Twist <%= kick_twist * 10 %></option>
-              <% end %>
-            </select>
-          </td>
-          <td>
-            <select id="kick-speed">
-              <option value="slow">slow</option>
-              <option value="medium" selected>medium</option>
-              <option value="fast">fast</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button class="direction" id="kick-left">Left</button>
-          </td>
-          <td>
-            <button class="direction" id="kick-right">Right</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="controller__left-controls">
-    <p>
-      <select id="speed">
-        <option value="slow">Slow</option>
-        <option value="medium" selected>Medium</option>
-        <option value="fast">Fast</option>
-      </select>
-      <select id="steps">
-        <%= for {steps, description, selected} <- steps_select() do %>
-          <option value="<%= steps %>" <%= selected %>><%= description %></option>
-        <% end %>
-      </select>
-    </p>
-    <hr/>
-    <p>
-      <button id="celebrate">Celebrate</button>
-      <button id="hello">Reset</button>
-    </p>
-    <p>
-      <button id="tap-left">Tap left</button>
-      <button id="tap-right">Tap right</button>
-    </p>
-    <p>
-      <button id="circle-left">Circle left</button>
-      <button id="circle-right">Circle right</button>
-    </p>
-    <p>
-      <button id="lifelike-on">Lifelike</button>
-      <button id="lifelike-off">Play dead</button>
-    </p>
-    <hr/>
-    <div class="bump-sensors">
-      <div id="left-bump" class="bump-sensor-state">
-        Left nope
-      </div>
-      <div id="right-bump" class="bump-sensor-state">
-        Right nope
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<div>
+  <div class="header">MartyBot</div>
+  <div class="top-panel">
+    <div class="top-panel__camera">
+      <%= img_tag("/images/stick_1.jpg", id: "cam", class: "top-panel__placeholder-image") %>
+    </div>
+    <div class= "top-panel__side-bar">
+      <div><img id="connection" src="/images/disconnected.svg" class="top-panel__icon"></div>
+      <div><img id="battery" src="/images/battery-unavailable.svg" class="top-panel__icon")></div>
+      <div class="top-panel__fidget">
+        <p class="top-panel__fidget-label">Fidget</p>
+        <label class="switch">
+          <input id="lifelike" type="checkbox">
+          <span class="slider round"></span>
+        </label>
       </div>
     </div>
-    <hr/>
-    <p id="connected">Disconnected</p>
-    <p id="battery"></p>
-    <hr/>
-    <p id="chat"></p>
   </div>
-
-
-</div>
-<div class="camera">
-  <%= img_tag("images/placeholder.gif", id: "cam") %>
+  <div class="input-panel__wrapper">
+    <div class="input-panel input-panel__motion">
+      <label class="input-panel__label">Motion</label>
+      <div class="input-panel__input">
+        <select id="motion-select">
+          <%= for {motion, description} <- motion_definitions() do %>
+            <option value="<%= motion %>"><%= description %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <div class="input-panel input-panel__speed">
+      <label class="input-panel__label">Speed</label>
+      <div id="speed" class="input-panel__input">
+        <label class="input-panel__radio-label"><input type="radio" name="speed" value="slow">Slow</label>
+        <label class="input-panel__radio-label"><input type="radio" name="speed" value="medium" checked>Medium</label>
+        <label class="input-panel__radio-label"><input type="radio" name="speed" value="fast">Fast</label>
+      </div>
+    </div>
+    <div class="input-panel input-panel__steps">
+      <label class="input-panel__label">Steps</label>
+      <div class="input-panel__input">
+        <select id="steps">
+          <%= for {steps, selected} <- steps_select() do %>
+            <option value="<%= steps %>" <%= selected %>><%= steps %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+  </div>
+  <button id="go" class="button__go">Go!</button>
+  <div class="button-panel__stop-clear">
+    <button id="hello" class="button__clear">Clear</button>
+    <button id="move-stop" class="button__stop">Stop</button>
+  </div>
 </div>

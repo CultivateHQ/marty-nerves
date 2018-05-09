@@ -1,21 +1,28 @@
 defmodule MartyWeb.PageView do
   use MartyWeb, :view
 
-  def control_row_definitions do
+  def motion_definitions do
     [
-      [{"forward-left", "nwarr"}, {"forward", "uarr"}, {"forward-right", "nearr"}],
-      [{"side-left", "larr"}, {"stop", "otimes"}, {"side-right", "rarr"}],
-      [{"back-left", "swarr"}, {"back", "darr"}, {"back-right", "searr"}]
+      {"forward", "Walk forward"},
+      {"back", "Walk back"},
+      {"side-left", "Walk left"},
+      {"side-right", "Walk right"},
+      {"forward-left", "Walk forward-left"},
+      {"forward-right", "Walk forward-right"},
+      {"back-left", "Walk back-left"},
+      {"back-right", "Walk back-right"},
+      {"tap-left", "Tap left"},
+      {"tap-right", "Tap right"},
+      {"kick-left", "Kick left"},
+      {"kick-right", "Kick right"},
+      {"circle-left", "Circle left"},
+      {"circle-right", "Circle right"},
+      {"celebrate", "Celebrate!"}
     ]
   end
 
   def steps_select do
     for steps <- [1, 2, 3, 5, 8, 13, 21, 44, 65, 109] do
-      description = if steps == 1 do
-        "1 step"
-      else
-        "#{steps} steps"
-      end
 
       selected = if steps == 3 do
         "selected"
@@ -23,7 +30,7 @@ defmodule MartyWeb.PageView do
         ""
       end
 
-      {steps, description, selected}
+      {steps, selected}
     end
   end
 end

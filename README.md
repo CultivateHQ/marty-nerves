@@ -1,23 +1,28 @@
 # Marty.Umbrella
 
+## Happy Path Marty Usage
+
+Assuming everything is connected up and the Pi Zero has the firmware installed:
+
+1. Power up the Airport Express
+2. On your laptop wait for the "Marty Wi-Fi Network" SSID to appear and connect to it. Credentials are in `1Password -> Shared -> Servers -> Cultivate Airport Express (for Marty)`
+3. Power up Marty
+4. Optionally, `ping 10.0.1.2` until you start to see a response
+5. Navigate to http://10.0.1.2/ in a browser to access the control Web UI
+6. Press the Clear button to see if Marty resets his position, or try making him walk. If he does, everything is good.
+
+## Development
+
 Umbrella project for a [Nerves](http://nerves-project.org) controller of [Marty the Robot](https://robotical.io).
 
 Applications:
 
 * `fw` - deals with Nerves and building the firmware release
-* `wifi` - gets us on the WiFi network
-* `marty` - sends commands to Marty.
+* `wifi` - connects our application to the WiFi network
+* `marty` - sends commands to the "Rick" board that actually controls Marty.
 * `marty_web` - Phoenix application for controlling Marty.
 * `camera` - controls a Picam
 * `image_server` - serves images from the Picam over websockets to the control
-
-
-## Development
-
-### Host only
-
-You can run the code from a development machine, rather than a raspberry Pi
-
 
 ## Development
 
@@ -29,6 +34,8 @@ You will need:
 
 * Elixir 1.6.0
 * Erlang 20.2
+* Phoenix - install by following the [installation instructions](https://hexdocs.pm/phoenix/installation.html#content)
+* Nerves - install by following the [installation instructions](https://hexdocs.pm/nerves/installation.html)
 
 From the root directory initially run
 
@@ -36,7 +43,15 @@ From the root directory initially run
 mix deps.get
 ```
 
-Start by running
+Then make sure web assets have been installed:
+
+```
+cd apps/marty_web/assets
+npm install
+cd ../../..
+```
+
+Then run the web UI like this:
 
 ```
 iex -S mix phx.server
@@ -48,9 +63,7 @@ iex -S mix phx.server
 cp apps/wifi/config/config.secret.example.exs apps/wifi/config/config.secret.exs
 ```
 
-Ideally edit `config.secret.exs` to match your WiFi settings. As this application connects to Marty over the Wifi then Marty must also be on the same network.
-
-Ensure you are set up for Nerves deployment. Instructions are [here](https://kapeli.com/dash_share?docset_file=nerves&docset_name=nerves&path=docs/installation.html&platform=hex&repo=Hex%20Docsets&version=1.0.0-rc.1).
+Ideally edit `config.secret.exs` to match your WiFi settings. As this application connects to Marty over the Wifi then Marty must also be on the same network. *NOTE* this needs to be the same network as the "Rick" board has been configured to connect to.
 
 Add the SD card to whatever card reader/writer you are using on your development box.
 
@@ -67,10 +80,12 @@ Marty's Pi should boot from the SD card.
 
 _There are special issues when working in the Cultivate office_: the office network can be pants with the Pi zeros. As of the end of March 2018 no Pi Zero could connect to the Cultivate SSID, though they could connect to  "CodeBASE - Visitor"; this changes periodically and is not predictable. Overall it is more reliable to use a different wireless router.
 
-See [apps/wifi/README.md](apps/wifi/README.md) for instructions on switching. Changing Marty's microprocessor board (aka Rick) to match the Pi network, necessary for the connection between the Pi and Marty, is documented on the [Robotical](https://robotical.io) website. As I write this I don't have a good internet connection so can't link to the exact page. From memory, to change Marty's WiFi settings:
+See [apps/wifi/README.md](apps/wifi/README.md) for instructions on switching. Changing Marty's microprocessor board (aka "Rick") to match the Pi network, necessary for the connection between the Pi and Marty, is documented on the [Robotical](https://robotical.io) website [here](https://robotical.io/learn/article/3/Marty%20Setup%2C%20Calibration%20%26%20Troubleshooting%20Guide/WiFi%20Setup/).
 
-* Find Bob the Button on Marty's board and hold for 10 seconds. Marty will make funny sounds.
+Essentially to configure "Rick":
+
 * Look for an unsecured network called something like "Marty Setup" and join.
+* Reset any existing stored Wifi settings by pressing "Bob the Button" on the "Rick" board. Marty will make funny sounds.
 * Open [http://192.168.4.1](http://192.168.4.1)
 * Follow the instructions
 
